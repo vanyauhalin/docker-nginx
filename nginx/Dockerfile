@@ -21,7 +21,6 @@ RUN set -e && \
 		g++ \
 		gcc \
 		git \
-		libc-dev \
 		linux-headers \
 		make \
 		openssl-dev \
