@@ -38,7 +38,11 @@ RUN set -e && \
 		git submodule update --init --recursive --depth 1 && \
 		mkdir deps/brotli/out && \
 		cd deps/brotli/out && \
-			cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=installed .. && \
+			cmake \
+				-DBUILD_SHARED_LIBS=OFF \
+				-DCMAKE_BUILD_TYPE=Release \
+				-DCMAKE_INSTALL_PREFIX=installed \
+				.. && \
 			cmake --build . --config Release --target brotlienc && \
 			cd / && \
 # Build Nginx
