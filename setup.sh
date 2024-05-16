@@ -140,6 +140,13 @@ setup() {
 		pacman -S github-cli
 	fi
 
+	answer=""
+	ask "? Generate a new SSH key for GitHub? (Y/n)" answer
+	if [ "$answer" = "" ] || [ "$answer" = "y" ]; then
+		ssh-keygen -t ed25519 -C "vanyauhalin@gmail.com" -f "$HOME/.ssh/github.com"
+		printf "%b" "Host github.com\n	IdentityFile \"$HOME/.ssh/github.com\"\n" >> "$HOME/.ssh/config"
+	fi
+
 	echo
 
 	answer=""
