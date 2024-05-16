@@ -6,14 +6,12 @@ LE_LIVE="/etc/letsencrypt/live"
 LE_WEBROOT="/var/lib/letsencrypt"
 
 args="$*"
-
 set --        "--agree-tos"
 set -- "${@}" "--email" "\"${LE_EMAIL}\""
 set -- "${@}" "--webroot"
 set -- "${@}" "--webroot-path" "\"${LE_WEBROOT}\""
 set -- "${@}" "--domains" "\"${LE_DOMAINS}\""
 options="${*}"
-
 set -- "$args"
 
 main() {
