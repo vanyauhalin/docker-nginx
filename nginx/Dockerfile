@@ -1,7 +1,6 @@
 ARG \
 	ALPINE_VERSION=3.19.1 \
 	CERTBOT_VERSION=2.10.0 \
-	NGINX_CONFIGURE_PARAMETERS=--with-compat --with-threads --with-file-aio --with-http_gzip_static_module --with-http_ssl_module --with-http_v2_module --with-http_v3_module \
 	NGINX_VERSION=1.25.5 \
 	NGX_BROTLI_COMMIT=a71f9312c2deb28875acc7bacfdd5695a111aa53 \
 	PCRE2_VERSION=10.43
@@ -9,7 +8,6 @@ ARG \
 FROM alpine:$ALPINE_VERSION AS build
 ARG \
 	CERTBOT_VERSION \
-	NGINX_CONFIGURE_PARAMETERS \
 	NGINX_VERSION \
 	NGX_BROTLI_COMMIT \
 	PCRE2_VERSION
@@ -65,11 +63,58 @@ RUN set -e && \
 			--http-scgi-temp-path=/var/cache/nginx/scgi_temp \
 			--user=nginx \
 			--group=nginx \
-			--with-pcre="/pcre2-$PCRE2_VERSION" \
 			--add-module=/ngx_brotli \
-			$NGINX_CONFIGURE_PARAMETERS && \
+			--with-threads \
+			--with-file-aio \
+			--with-http_ssl_module \
+			--with-http_v2_module \
+			--with-http_v3_module \
+			--without-http_ssi_module \
+			--without-http_userid_module \
+			--without-http_access_module \
+			--without-http_auth_basic_module \
+			--without-http_mirror_module \
+			--without-http_autoindex_module \
+			--without-http_geo_module \
+			--without-http_map_module \
+			--without-http_split_clients_module \
+			--without-http_referer_module \
+			--without-http_fastcgi_module \
+			--without-http_uwsgi_module \
+			--without-http_scgi_module \
+			--without-http_grpc_module \
+			--without-http_memcached_module \
+			--without-http_limit_conn_module \
+			--without-http_limit_req_module \
+			--without-http_empty_gif_module \
+			--without-http_browser_module \
+			--without-http_upstream_hash_module \
+			--without-http_upstream_ip_hash_module \
+			--without-http_upstream_least_conn_module \
+			--without-http_upstream_random_module \
+			--without-http_upstream_keepalive_module \
+			--without-http_upstream_zone_module \
+			--without-mail_pop3_module \
+			--without-mail_imap_module \
+			--without-mail_smtp_module \
+			--without-stream_limit_conn_module \
+			--without-stream_access_module \
+			--without-stream_geo_module \
+			--without-stream_map_module \
+			--without-stream_split_clients_module \
+			--without-stream_return_module \
+			--without-stream_set_module \
+			--without-stream_upstream_hash_module \
+			--without-stream_upstream_least_conn_module \
+			--without-stream_upstream_random_module \
+			--without-stream_upstream_zone_module \
+			--with-pcre="/pcre2-$PCRE2_VERSION" && \
 		make && \
 		make install && \
+		rm -r \
+			/etc/nginx/fastcgi* \
+			/etc/nginx/scgi* \
+			/etc/nginx/uwsgi* && \
 # Download additional SSL configurations
 	mkdir /etc/nginx/snippets && \
 	cd /etc/nginx/snippets && \
