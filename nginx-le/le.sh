@@ -76,7 +76,7 @@ prod() {
 job() {
 	file=$(readlink -f "$0")
 	dir=$(dirname "$file")
-	sh="#!/bin/sh\nLE_EMAIL=\"$LE_EMAIL\" LE_DOMAINS=\"$LE_DOMAINS\" \"$file\" renew >> \"$dir/le.log\" 2>&1\n"
+	sh="#!/bin/sh\nsu nginx -c 'LE_EMAIL=\"$LE_EMAIL\" LE_DOMAINS=\"$LE_DOMAINS\" \"$file\" renew >> \"$dir/le.log\" 2>&1'"
 	file=/etc/periodic/weekly/le
 	printf "%b" "$sh" > $file
 	chmod +x $file
