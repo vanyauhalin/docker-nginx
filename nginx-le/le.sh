@@ -31,6 +31,11 @@ main() {
 }
 
 route() {
+	if [ "$1" = "self" ]; then
+		self
+		return
+	fi
+
 	if [ "$1" = "test" ]; then
 		test
 		return
@@ -53,6 +58,28 @@ route() {
 
 	log "Unknown command: $1"
 	exit 1
+}
+
+self() {
+	root=/etc/letsencrypt/live
+	mkdir -p "$root"
+	ifs="$IFS"
+	IFS=","
+	for domain in $LE_DOMAINS; do
+		dir="$root/$domain"
+		mkdir "$dir"
+		openssl req \
+			-days 1 \
+			-keyout "$dir/privkey.pem" \
+			-newkey rsa:1024 \
+			-out "$dir/fullchain.pem" \
+			-subj "/CN=localhost" \
+			-nodes \
+			-x509
+		cp "$dir/fullchain.pem" "$dir/chain.pem"
+	done
+	IFS="$ifs"
+	chown -R nginx:nginx "$root"
 }
 
 test() {
@@ -86,6 +113,7 @@ help() {
 	echo
 	echo "Commands:"
 	echo "  help   Show this help message"
+	echo "  self   Generate a self-signed certificate"
 	echo "  test   Obtain a test certificate"
 	echo "  prod   Obtain a production certificate"
 	echo "  job    Schedule a job to renew the certificate"
