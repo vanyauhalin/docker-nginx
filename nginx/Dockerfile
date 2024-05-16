@@ -124,7 +124,6 @@ RUN set -e && \
 FROM alpine:$ALPINE_VERSION
 COPY --from=build /etc/nginx /etc/nginx
 COPY --from=build /usr/sbin/nginx /usr/sbin
-COPY le.sh /srv
 RUN set -e && \
 # Update dependencies
 	apk update && \
@@ -143,11 +142,7 @@ RUN set -e && \
 		touch access.log && \
 		ln -sf /dev/stdout access.log && \
 		touch error.log && \
-		ln -sf /dev/stderr error.log && \
-# Install Let's Encrypt dependencies
-	chmod +x /srv/le.sh && \
-	apk add --no-cache certbot
+		ln -sf /dev/stderr error.log
 EXPOSE 80 443
 STOPSIGNAL SIGTERM
-WORKDIR /srv
 CMD ["nginx", "-g", "daemon off;"]
