@@ -2,12 +2,15 @@
 
 set -ue
 
+LE_LIVE="/etc/letsencrypt/live"
+LE_WEBROOT="/var/lib/letsencrypt"
+
 args="$*"
 
 set --        "--agree-tos"
 set -- "${@}" "--email" "\"${LE_EMAIL}\""
 set -- "${@}" "--webroot"
-set -- "${@}" "--webroot-path" "/var/lib/letsencrypt"
+set -- "${@}" "--webroot-path" "\"${LE_WEBROOT}\""
 set -- "${@}" "--domains" "\"${LE_DOMAINS}\""
 options="${*}"
 
@@ -61,12 +64,11 @@ route() {
 }
 
 self() {
-	root=/etc/letsencrypt/live
-	mkdir -p "$root"
+	mkdir -p "$LE_LIVE"
 	ifs="$IFS"
 	IFS=","
 	for domain in $LE_DOMAINS; do
-		dir="$root/$domain"
+		dir="$LE_LIVE/$domain"
 		mkdir "$dir"
 		openssl req \
 			-days 1 \
@@ -79,18 +81,20 @@ self() {
 		cp "$dir/fullchain.pem" "$dir/chain.pem"
 	done
 	IFS="$ifs"
-	chown -R nginx:nginx "$root"
+	chown -R nginx:nginx "$LE_LIVE"
 }
 
 test() {
 	# shellcheck disable=SC2086
 	certbot certonly --staging $options
+	chown -R nginx:nginx "$LE_LIVE"
 	nginx -s reload
 }
 
 prod() {
 	# shellcheck disable=SC2086
 	certbot certonly $options
+	chown -R nginx:nginx "$LE_LIVE"
 	nginx -s reload
 }
 
@@ -105,6 +109,7 @@ job() {
 
 renew() {
 	certbot renew --non-interactive
+	chown -R nginx:nginx "$LE_LIVE"
 	nginx -s reload
 }
 
