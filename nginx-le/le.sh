@@ -1,6 +1,6 @@
 #!/bin/sh
 
-set -u
+set -ue
 
 args="$*"
 
@@ -27,13 +27,7 @@ main() {
 	fi
 
 	log "Executing the \"$command\" command with: $options"
-
-	if ! route "$command"; then
-		log "Failed to execute the \"$command\" command"
-		exit 1
-	fi
-
-	log "Successfully executed the \"$command\" command"
+	route "$command"
 }
 
 route() {
@@ -58,7 +52,7 @@ route() {
 	fi
 
 	log "Unknown command: $1"
-	return 1
+	exit 1
 }
 
 test() {
