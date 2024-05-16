@@ -149,6 +149,8 @@ setup() {
 		systemctl start docker.service
 		systemctl enable docker.service
 		gpasswd --add "$USER" docker
+		pacman -S docker-buildx
+		pacman -S docker-compose
 	fi
 
 	echo
