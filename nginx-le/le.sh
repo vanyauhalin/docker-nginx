@@ -19,6 +19,7 @@ main() {
 
 options() {
 	s="--agree-tos"
+	s="${s} --no-eff-email"
 	s="${s} --config-dir ${LE_CONFIG_DIR}"
 	s="${s} --work-dir ${LE_WORK_DIR}"
 	s="${s} --logs-dir ${LE_LOGS_DIR}"
