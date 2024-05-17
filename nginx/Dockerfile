@@ -1,13 +1,11 @@
 ARG \
 	ALPINE_VERSION=3.19.1 \
-	CERTBOT_VERSION=2.10.0 \
 	NGINX_VERSION=1.25.5 \
 	NGX_BROTLI_COMMIT=a71f9312c2deb28875acc7bacfdd5695a111aa53 \
 	PCRE2_VERSION=10.43
 
 FROM alpine:$ALPINE_VERSION AS build
 ARG \
-	CERTBOT_VERSION \
 	NGINX_VERSION \
 	NGX_BROTLI_COMMIT \
 	PCRE2_VERSION
@@ -113,12 +111,7 @@ RUN set -e && \
 		rm -r \
 			/etc/nginx/fastcgi* \
 			/etc/nginx/scgi* \
-			/etc/nginx/uwsgi* && \
-# Download additional SSL configurations
-	mkdir /etc/nginx/snippets && \
-	cd /etc/nginx/snippets && \
-		wget --output-document=options-ssl-nginx.conf "https://raw.githubusercontent.com/certbot/certbot/v$CERTBOT_VERSION/certbot-nginx/certbot_nginx/_internal/tls_configs/options-ssl-nginx.conf" && \
-		wget --output-document=ssl-dhparams.pem "https://raw.githubusercontent.com/certbot/certbot/v$CERTBOT_VERSION/certbot/certbot/ssl-dhparams.pem"
+			/etc/nginx/uwsgi*
 
 FROM alpine:$ALPINE_VERSION
 COPY --from=build /etc/nginx /etc/nginx
