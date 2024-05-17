@@ -3,7 +3,7 @@
 set -ue
 
 mkdir -p \
-	"$LE_CONFIG_DIR" \
+	"$LE_CONFIG_DIR/live" \
 	"$LE_LOGS_DIR" \
 	"$LE_WEBROOT_DIR" \
 	"$LE_WORK_DIR"

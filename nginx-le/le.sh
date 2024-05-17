@@ -37,13 +37,10 @@ options() {
 }
 
 self() {
-	live_dir="$LE_CONFIG_DIR/live"
-	mkdir -p "$live_dir"
-
 	ifs="$IFS"
 	IFS=","
 	for domain in $LE_DOMAINS; do
-		dir="$live_dir/$domain"
+		dir="$LE_CONFIG_DIR/live/$domain"
 		mkdir "$dir"
 		openssl req \
 			-days 1 \
