@@ -57,20 +57,20 @@ self() {
 	done
 	IFS="$ifs"
 
-	chown -R nginx:nginx "$LE_CONFIG_DIR"
+	reown
 }
 
 test() {
 	# shellcheck disable=SC2046
 	certbot certonly --staging $(options)
-	chown -R nginx:nginx "$LE_CONFIG_DIR"
+	reown
 	nginx -s reload
 }
 
 prod() {
 	# shellcheck disable=SC2046
 	certbot certonly $(options)
-	chown -R nginx:nginx "$LE_CONFIG_DIR"
+	reown
 	nginx -s reload
 }
 
@@ -87,8 +87,40 @@ job() {
 
 renew() {
 	certbot renew --non-interactive
-	chown -R nginx:nginx "$LE_CONFIG_DIR"
+	reown
 	nginx -s reload
+}
+
+reown() {
+	ifs="$IFS"
+	IFS=","
+	for domain in $LE_DOMAINS; do
+		for state in "live" "archive" "renewal"; do
+			dir="$LE_CONFIG_DIR/$state/$domain"
+			if [ ! -d "$dir" ]; then
+				continue
+			fi
+
+			file="$dir/chain"
+			if ls "$file"* 1> /dev/null 2>&1; then
+				chgrp nginx "$file"*
+				chmod 644 "$file"*
+			fi
+
+			file="$dir/fullchain"
+			if ls "$file"* 1> /dev/null 2>&1; then
+				chgrp nginx "$file"*
+				chmod 644 "$file"*
+			fi
+
+			file="$dir/privkey"
+			if ls "$file"* 1> /dev/null 2>&1; then
+				chgrp nginx "$file"*
+				chmod 640 "$file"*
+			fi
+		done
+	done
+	IFS="$ifs"
 }
 
 help() {
