@@ -51,6 +51,9 @@ self() {
 			-nodes \
 			-x509
 		cp "$dir/fullchain.pem" "$dir/chain.pem"
+
+		dir="${LE_WEBROOT_DIR}/${domain}"
+		mkdir "$dir"
 	done
 	IFS="$ifs"
 
