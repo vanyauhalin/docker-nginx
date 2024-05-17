@@ -7,10 +7,10 @@ LE_WEBROOT="/var/lib/letsencrypt"
 
 args="$*"
 set --        "--agree-tos"
-set -- "${@}" "--email" "\"${LE_EMAIL}\""
+set -- "${@}" "--email" "${LE_EMAIL}"
 set -- "${@}" "--webroot"
-set -- "${@}" "--webroot-path" "\"${LE_WEBROOT}\""
-set -- "${@}" "--domains" "\"${LE_DOMAINS}\""
+set -- "${@}" "--webroot-path" "${LE_WEBROOT}"
+set -- "${@}" "--domains" "${LE_DOMAINS}"
 options="${*}"
 set -- "$args"
 
@@ -99,7 +99,7 @@ prod() {
 job() {
 	file=$(readlink -f "$0")
 	dir=$(dirname "$file")
-	sh="#!/bin/sh\nLE_EMAIL=\"$LE_EMAIL\" LE_DOMAINS=\"$LE_DOMAINS\" \"$file\" renew >> \"$dir/le.log\" 2>&1\n"
+	sh="#!/bin/sh\nLE_EMAIL=$LE_EMAIL LE_DOMAINS=$LE_DOMAINS \"$file\" renew >> \"$dir/le.log\" 2>&1\n"
 	file=/etc/periodic/weekly/le
 	printf "%b" "$sh" > $file
 	chmod +x $file
