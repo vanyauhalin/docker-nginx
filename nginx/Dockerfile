@@ -23,9 +23,6 @@ RUN set -e && \
 		make \
 		openssl-dev \
 		zlib-dev && \
-# Download PCRE2
-	wget --output-document=- "https://github.com/PCRE2Project/pcre2/releases/download/pcre2-$PCRE2_VERSION/pcre2-$PCRE2_VERSION.tar.gz" | \
-		tar --extract --gzip && \
 # Build Brotli
 	mkdir ngx_brotli && \
 	cd ngx_brotli && \
@@ -44,6 +41,8 @@ RUN set -e && \
 			cmake --build . --config Release --target brotlienc && \
 			cd / && \
 # Build Nginx
+	wget --output-document=- "https://github.com/PCRE2Project/pcre2/releases/download/pcre2-$PCRE2_VERSION/pcre2-$PCRE2_VERSION.tar.gz" | \
+		tar --extract --gzip && \
 	wget --output-document=- "https://nginx.org/download/nginx-$NGINX_VERSION.tar.gz" | \
 		tar --extract --gzip && \
 	cd "nginx-$NGINX_VERSION" && \
