@@ -79,9 +79,7 @@ unself() {
 	IFS=","
 	for domain in $LE_DOMAINS; do
 		dir="$LE_CONFIG_DIR/live/$domain"
-		rm "$dir/privkey.pem"
-		rm "$dir/fullchain.pem"
-		rm "$dir/chain.pem"
+		rm "$dir/privkey.pem" "$dir/fullchain.pem" "$dir/chain.pem"
 	done
 	IFS="$ifs"
 }
