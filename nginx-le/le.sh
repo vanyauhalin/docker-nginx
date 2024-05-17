@@ -8,6 +8,7 @@ main() {
 	if [ "$cmd" = "help" ];    then help;    return;   fi
 	log "Executing the '$cmd' command"
 	if [ "$cmd" = "options" ]; then options; return;   fi
+	# shellcheck disable=SC3044
 	if [ "$cmd" = "dirs" ];    then dirs;    return;   fi
 	if [ "$cmd" = "self" ];    then self;    return;   fi
 	if [ "$cmd" = "unself" ];  then unself;  return;   fi
