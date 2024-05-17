@@ -2,18 +2,6 @@
 
 set -ue
 
-LE_LIVE="/etc/letsencrypt/live"
-LE_WEBROOT="/var/lib/letsencrypt"
-
-args="$*"
-set --        "--agree-tos"
-set -- "${@}" "--email" "${LE_EMAIL}"
-set -- "${@}" "--webroot"
-set -- "${@}" "--webroot-path" "${LE_WEBROOT}"
-set -- "${@}" "--domains" "${LE_DOMAINS}"
-options="${*}"
-set -- "$args"
-
 main() {
 	command=${1-""}
 
@@ -27,11 +15,16 @@ main() {
 		exit
 	fi
 
-	log "Executing the \"$command\" command with: $options"
+	log "Executing the \"$command\" command"
 	route "$command"
 }
 
 route() {
+	if [ "$1" = "options" ]; then
+		options
+		return
+	fi
+
 	if [ "$1" = "self" ]; then
 		self
 		return
@@ -61,12 +54,32 @@ route() {
 	exit 1
 }
 
-self() {
-	mkdir -p "$LE_LIVE"
+options() {
+	s="--agree-tos"
+	s="${s} --config-dir ${LE_CONFIG_DIR}"
+	s="${s} --work-dir ${LE_WORK_DIR}"
+	s="${s} --logs-dir ${LE_LOGS_DIR}"
+	s="${s} --email ${LE_EMAIL}"
+	s="${s} --webroot"
+
 	ifs="$IFS"
 	IFS=","
 	for domain in $LE_DOMAINS; do
-		dir="$LE_LIVE/$domain"
+		s="${s} --webroot-path ${LE_WEBROOT_DIR}/${domain}"
+		s="${s} --domain ${domain}"
+	done
+	IFS="$ifs"
+
+	echo "$s"
+}
+
+self() {
+	live_dir="$LE_CONFIG_DIR/live"
+	mkdir -p "$live_dir"
+	ifs="$IFS"
+	IFS=","
+	for domain in $LE_DOMAINS; do
+		dir="$live_dir/$domain"
 		mkdir "$dir"
 		openssl req \
 			-days 1 \
@@ -79,27 +92,29 @@ self() {
 		cp "$dir/fullchain.pem" "$dir/chain.pem"
 	done
 	IFS="$ifs"
-	chown -R nginx:nginx "$LE_LIVE"
+	chown -R nginx:nginx "$LE_CONFIG_DIR"
 }
 
 test() {
-	# shellcheck disable=SC2086
-	certbot certonly --staging $options
-	chown -R nginx:nginx "$LE_LIVE"
+	# shellcheck disable=SC2046
+	certbot certonly --staging $(options)
+	chown -R nginx:nginx "$LE_CONFIG_DIR"
 	nginx -s reload
 }
 
 prod() {
-	# shellcheck disable=SC2086
-	certbot certonly $options
-	chown -R nginx:nginx "$LE_LIVE"
+	# shellcheck disable=SC2046
+	certbot certonly $(options)
+	chown -R nginx:nginx "$LE_CONFIG_DIR"
 	nginx -s reload
 }
 
 job() {
 	file=$(readlink -f "$0")
 	dir=$(dirname "$file")
-	sh="#!/bin/sh\nLE_EMAIL=$LE_EMAIL LE_DOMAINS=$LE_DOMAINS \"$file\" renew >> \"$dir/le.log\" 2>&1\n"
+	sh="#!/bin/sh\n"
+	sh="$sh\"$file\" options >> \"$dir/le.log\" 2>&1\n"
+	sh="$sh\"$file\" renew >> \"$dir/le.log\" 2>&1\n"
 	file=/etc/periodic/weekly/le
 	printf "%b" "$sh" > $file
 	chmod +x $file
@@ -107,7 +122,7 @@ job() {
 
 renew() {
 	certbot renew --non-interactive
-	chown -R nginx:nginx "$LE_LIVE"
+	chown -R nginx:nginx "$LE_CONFIG_DIR"
 	nginx -s reload
 }
 
@@ -115,12 +130,13 @@ help() {
 	echo "Usage: le.sh <command>"
 	echo
 	echo "Commands:"
-	echo "  help   Show this help message"
-	echo "  self   Generate a self-signed certificate"
-	echo "  test   Obtain a test certificate"
-	echo "  prod   Obtain a production certificate"
-	echo "  job    Schedule a job to renew the certificate"
-	echo "  renew  Renew the certificate"
+	echo "  help     Show this help message"
+	echo "  options  Show the letsencrypt options"
+	echo "  self     Generate a self-signed certificate"
+	echo "  test     Obtain a test certificate"
+	echo "  prod     Obtain a production certificate"
+	echo "  job      Schedule a job to renew the certificate"
+	echo "  renew    Renew the certificate"
 }
 
 log() {
