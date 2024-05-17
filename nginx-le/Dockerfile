@@ -12,3 +12,4 @@ RUN set -e && \
 	chmod +x /entrypoint.sh && \
 	chmod +x le.sh
 ENTRYPOINT ["/entrypoint.sh"]
+CMD ["nginx", "-g", "daemon off;"]

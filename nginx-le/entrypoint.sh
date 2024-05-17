@@ -12,3 +12,4 @@ mkdir -p \
 ./le.sh job >> ./le.log 2>&1
 
 crond
+exec "$@"
