@@ -2,14 +2,17 @@
 
 set -ue
 
-mkdir -p \
-	"$LE_CONFIG_DIR/live" \
-	"$LE_LOGS_DIR" \
-	"$LE_WEBROOT_DIR" \
-	"$LE_WORK_DIR"
+./le.sh options
+./le.sh dirs
+./le.sh self
 
-./le.sh self >> ./le.log 2>&1
-./le.sh job >> ./le.log 2>&1
+(
+	sleep 5
+	./le.sh unself
+	./le.sh test
+	./le.sh job
+	crond
+	# ./le.sh prod
+) &
 
-crond
 exec "$@"
