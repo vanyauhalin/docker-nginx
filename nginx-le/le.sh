@@ -8,6 +8,7 @@ main() {
 	if [ "$cmd" = "help" ];    then help;    return;   fi
 	log "Executing the '$cmd' command"
 	if [ "$cmd" = "options" ]; then options; return;   fi
+	if [ "$cmd" = "dirs" ];    then dirs;    return;   fi
 	if [ "$cmd" = "self" ];    then self;    return;   fi
 	if [ "$cmd" = "unself" ];  then unself;  return;   fi
 	if [ "$cmd" = "test" ];    then test;    return;   fi
@@ -38,6 +39,21 @@ options() {
 	echo "$s"
 }
 
+dirs() {
+	mkdir -p \
+		"$LE_CONFIG_DIR/live" \
+		"$LE_LOGS_DIR" \
+		"$LE_WEBROOT_DIR" \
+		"$LE_WORK_DIR"
+	ifs="$IFS"
+	IFS=","
+	for domain in $LE_DOMAINS; do
+		dir="${LE_WEBROOT_DIR}/${domain}"
+		mkdir "$dir"
+	done
+	IFS="$ifs"
+}
+
 self() {
 	ifs="$IFS"
 	IFS=","
@@ -53,9 +69,6 @@ self() {
 			-nodes \
 			-x509
 		cp "$dir/fullchain.pem" "$dir/chain.pem"
-
-		dir="${LE_WEBROOT_DIR}/${domain}"
-		mkdir "$dir"
 	done
 	IFS="$ifs"
 	reown
@@ -69,9 +82,6 @@ unself() {
 		rm "$dir/privkey.pem"
 		rm "$dir/fullchain.pem"
 		rm "$dir/chain.pem"
-
-		dir="${LE_WEBROOT_DIR}/${domain}"
-		rmdir "$dir"
 	done
 	IFS="$ifs"
 }
@@ -143,6 +153,7 @@ help() {
 	echo "Subcommands:"
 	echo "  help     Show this help message"
 	echo "  options  Show the letsencrypt options"
+	echo "  dirs     Create the letsencrypt directories"
 	echo "  self     Generate a self-signed certificate"
 	echo "  unself   Remove the self-signed certificate"
 	echo "  test     Obtain a test certificate"
