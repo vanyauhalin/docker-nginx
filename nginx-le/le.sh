@@ -9,6 +9,7 @@ main() {
 	log "Executing the '$cmd' command"
 	if [ "$cmd" = "options" ]; then options; return;   fi
 	if [ "$cmd" = "self" ];    then self;    return;   fi
+	if [ "$cmd" = "unself" ];  then unself;  return;   fi
 	if [ "$cmd" = "test" ];    then test;    return;   fi
 	if [ "$cmd" = "prod" ];    then prod;    return;   fi
 	if [ "$cmd" = "job" ];     then job;     return;   fi
@@ -59,6 +60,21 @@ self() {
 	IFS="$ifs"
 
 	reown
+}
+
+unself() {
+	ifs="$IFS"
+	IFS=","
+	for domain in $LE_DOMAINS; do
+		dir="$LE_CONFIG_DIR/live/$domain"
+		rm "$dir/privkey.pem"
+		rm "$dir/fullchain.pem"
+		rm "$dir/chain.pem"
+
+		dir="${LE_WEBROOT_DIR}/${domain}"
+		rmdir "$dir"
+	done
+	IFS="$ifs"
 }
 
 test() {
@@ -131,6 +147,7 @@ help() {
 	echo "  help     Show this help message"
 	echo "  options  Show the letsencrypt options"
 	echo "  self     Generate a self-signed certificate"
+	echo "  unself   Remove the self-signed certificate"
 	echo "  test     Obtain a test certificate"
 	echo "  prod     Obtain a production certificate"
 	echo "  job      Schedule a job to renew the certificate"
