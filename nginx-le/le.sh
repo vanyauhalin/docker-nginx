@@ -58,7 +58,6 @@ self() {
 		mkdir "$dir"
 	done
 	IFS="$ifs"
-
 	reown
 }
 
