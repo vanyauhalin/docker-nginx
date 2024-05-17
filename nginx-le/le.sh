@@ -3,55 +3,18 @@
 set -ue
 
 main() {
-	command=${1-""}
-
-	if [ "$command" = "" ]; then
-		help
-		exit 1
-	fi
-
-	if [ "$command" = "help" ]; then
-		help
-		exit
-	fi
-
-	log "Executing the \"$command\" command"
-	route "$command"
-}
-
-route() {
-	if [ "$1" = "options" ]; then
-		options
-		return
-	fi
-
-	if [ "$1" = "self" ]; then
-		self
-		return
-	fi
-
-	if [ "$1" = "test" ]; then
-		test
-		return
-	fi
-
-	if [ "$1" = "prod" ]; then
-		prod
-		return
-	fi
-
-	if [ "$1" = "job" ]; then
-		job
-		return
-	fi
-
-	if [ "$1" = "renew" ]; then
-		renew
-		return
-	fi
-
-	log "Unknown command: $1"
-	exit 1
+	cmd=${1-""}
+	if [ "$cmd" = "" ];        then help;    return 1; fi
+	if [ "$cmd" = "help" ];    then help;    return;   fi
+	log "Executing the '$cmd' command"
+	if [ "$cmd" = "options" ]; then options; return;   fi
+	if [ "$cmd" = "self" ];    then self;    return;   fi
+	if [ "$cmd" = "test" ];    then test;    return;   fi
+	if [ "$cmd" = "prod" ];    then prod;    return;   fi
+	if [ "$cmd" = "job" ];     then job;     return;   fi
+	if [ "$cmd" = "renew" ];   then renew;   return;   fi
+	log "Unknown the command '$cmd'"
+	return 1
 }
 
 options() {
@@ -76,6 +39,7 @@ options() {
 self() {
 	live_dir="$LE_CONFIG_DIR/live"
 	mkdir -p "$live_dir"
+
 	ifs="$IFS"
 	IFS=","
 	for domain in $LE_DOMAINS; do
@@ -92,6 +56,7 @@ self() {
 		cp "$dir/fullchain.pem" "$dir/chain.pem"
 	done
 	IFS="$ifs"
+
 	chown -R nginx:nginx "$LE_CONFIG_DIR"
 }
 
@@ -129,7 +94,7 @@ renew() {
 help() {
 	echo "Usage: le.sh <command>"
 	echo
-	echo "Commands:"
+	echo "Subcommands:"
 	echo "  help     Show this help message"
 	echo "  options  Show the letsencrypt options"
 	echo "  self     Generate a self-signed certificate"
