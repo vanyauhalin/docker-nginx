@@ -42,46 +42,124 @@ options() {
 
 dirs() {
 	mkdir -p \
-		"$LE_CONFIG_DIR/live" \
+		"$LE_CONFIG_DIR" \
 		"$LE_LOGS_DIR" \
 		"$LE_WEBROOT_DIR" \
-		"$LE_WORK_DIR"
+		"$LE_WORK_DIR" \
+		"$(live_dir)" \
+		"$(self_dir)"
 	ifs="$IFS"
 	IFS=","
 	for domain in $LE_DOMAINS; do
 		dir="${LE_WEBROOT_DIR}/${domain}"
-		mkdir "$dir"
+		mkdir -p "$dir"
 	done
 	IFS="$ifs"
 }
 
 self() {
+	live_dir=$(live_dir)
+	if [ ! -d "$live_dir" ]; then
+		log "The '$live_dir' directory does not exist"
+		return 1
+	fi
+
+	self_dir=$(self_dir)
+	if [ ! -d "$self_dir" ]; then
+		log "The '$self_dir' directory does not exist"
+		return 1
+	fi
+
 	ifs="$IFS"
 	IFS=","
+
 	for domain in $LE_DOMAINS; do
-		dir="$LE_CONFIG_DIR/live/$domain"
-		mkdir "$dir"
+		live="$live_dir/$domain"
+		if [ -d "$live" ]; then
+			log "The certificate for the domain '$domain' already exists"
+			continue
+		fi
+
+		self="$self_dir/$domain"
+		if [ -d "$self" ]; then
+			log "The self-signed certificate for the domain '$domain' already exists"
+			continue
+		fi
+
+		log "Generating a self-signed certificate for the domain '$domain'"
+
+		mkdir "$live" "$self"
+
 		openssl req \
 			-days 1 \
-			-keyout "$dir/privkey.pem" \
+			-keyout "$self/privkey.pem" \
 			-newkey rsa:1024 \
-			-out "$dir/fullchain.pem" \
+			-out "$self/fullchain.pem" \
 			-subj "/CN=localhost" \
 			-nodes \
 			-x509
-		cp "$dir/fullchain.pem" "$dir/chain.pem"
+		cp "$self/fullchain.pem" "$self/chain.pem"
+
+		file="$self/chain.pem"
+		chgrp nginx "$file"
+		chmod 644 "$file"
+
+		file="$self/fullchain.pem"
+		chgrp nginx "$file"
+		chmod 644 "$file"
+
+		file="$self/privkey.pem"
+		chgrp nginx "$file"
+		chmod 640 "$file"
+
+		for name in "chain" "fullchain" "privkey"; do
+			ln -s "$self/$name.pem" "$live/$name.pem"
+		done
 	done
+
 	IFS="$ifs"
-	reown
 }
 
 unself() {
+	live_dir=$(live_dir)
+	if [ ! -d "$live_dir" ]; then
+		log "The '$live_dir' directory does not exist"
+		return 1
+	fi
+
+	self_dir=$(self_dir)
+	if [ ! -d "$self_dir" ]; then
+		log "The '$self_dir' directory does not exist"
+		return 1
+	fi
+
 	ifs="$IFS"
 	IFS=","
+
 	for domain in $LE_DOMAINS; do
-		dir="$LE_CONFIG_DIR/live/$domain"
-		rm "$dir/privkey.pem" "$dir/fullchain.pem" "$dir/chain.pem"
+		live="$live_dir/$domain"
+		if [ ! -d "$live" ]; then
+			log "The certificate for the domain '$domain' does not exist"
+			continue
+		fi
+
+		self="$self_dir/$domain"
+		if [ ! -d "$self" ]; then
+			log "The self-signed certificate for the domain '$domain' does not exist"
+			continue
+		fi
+
+		log "Removing the self-signed certificate for the domain '$domain'"
+
+		for name in "chain" "fullchain" "privkey"; do
+			link="$live/$name.pem"
+			traget=$(readlink "$link")
+			rm "$link" "$traget"
+		done
+
+		rmdir "$live" "$self"
 	done
+
 	IFS="$ifs"
 }
 
@@ -117,11 +195,16 @@ renew() {
 }
 
 reown() {
+	archive_dir=$(archive_dir)
+	live_dir=$(live_dir)
+	renewal_dir=$(renewal_dir)
+
 	ifs="$IFS"
 	IFS=","
+
 	for domain in $LE_DOMAINS; do
-		for state in "live" "archive" "renewal"; do
-			dir="$LE_CONFIG_DIR/$state/$domain"
+		for dir in "$archive_dir" "$live_dir" "$renewal_dir"; do
+			dir="$dir/$domain"
 			if [ ! -d "$dir" ]; then
 				continue
 			fi
@@ -145,7 +228,26 @@ reown() {
 			fi
 		done
 	done
+
 	IFS="$ifs"
+}
+
+archive_dir() {
+	echo "$LE_CONFIG_DIR/archive"
+}
+
+live_dir() {
+	echo "$LE_CONFIG_DIR/live"
+}
+
+renewal_dir() {
+	echo "$LE_CONFIG_DIR/renewal"
+}
+
+self_dir() {
+	file=$(readlink "$0")
+	dir=$(dirname "$file")
+	echo "$dir/self"
 }
 
 help() {
