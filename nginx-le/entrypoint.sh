@@ -9,7 +9,6 @@ set -ue
 (
 	sleep 5
 	./le.sh unself
-	./le.sh test
 	./le.sh job
 	crond
 ) &
