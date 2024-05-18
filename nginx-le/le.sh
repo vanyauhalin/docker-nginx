@@ -98,7 +98,7 @@ prod() {
 }
 
 job() {
-	file=$(readlink -f "$0")
+	file=$(readlink "$0")
 	dir=$(dirname "$file")
 	sh="#!/bin/sh\n"
 	sh="$sh\"$file\" options >> \"$dir/le.log\" 2>&1\n"
