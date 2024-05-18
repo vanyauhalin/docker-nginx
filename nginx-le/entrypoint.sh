@@ -12,7 +12,6 @@ set -ue
 	./le.sh test
 	./le.sh job
 	crond
-	# ./le.sh prod
 ) &
 
 exec "$@"
