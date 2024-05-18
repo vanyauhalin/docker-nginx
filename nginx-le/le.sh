@@ -104,8 +104,8 @@ job() {
 	sh="$sh\"$file\" options >> \"$dir/le.log\" 2>&1\n"
 	sh="$sh\"$file\" renew >> \"$dir/le.log\" 2>&1\n"
 	file=/etc/periodic/weekly/le
-	printf "%b" "$sh" > $file
-	chmod +x $file
+	printf "%b" "$sh" > "$file"
+	chmod +x "$file"
 }
 
 renew() {
