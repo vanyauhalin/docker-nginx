@@ -115,6 +115,7 @@ self() {
 
 		for name in "chain" "fullchain" "privkey"; do
 			ln -s "$self/$name.pem" "$live/$name.pem"
+			chmod 777 "$live/$name.pem"
 		done
 	done
 
