@@ -155,7 +155,7 @@ unself() {
 
 		for name in "chain" "fullchain" "privkey"; do
 			link="$live/$name.pem"
-			traget=$(readlink "$link")
+			traget=$(realpath "$link")
 			rm "$link" "$traget"
 		done
 
@@ -180,7 +180,7 @@ prod() {
 }
 
 job() {
-	file=$(readlink "$0")
+	file=$(realpath "$0")
 	dir=$(dirname "$file")
 	sh="#!/bin/sh\n"
 	sh="$sh\"$file\" options >> \"$dir/le.log\" 2>&1\n"
@@ -247,7 +247,7 @@ renewal_dir() {
 }
 
 self_dir() {
-	file=$(readlink "$0")
+	file=$(realpath "$0")
 	dir=$(dirname "$file")
 	echo "$dir/self"
 }
