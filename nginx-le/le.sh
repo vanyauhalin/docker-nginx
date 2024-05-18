@@ -88,6 +88,8 @@ unself() {
 test() {
 	# shellcheck disable=SC2046
 	certbot certonly --staging $(options)
+	reown
+	nginx -s reload
 }
 
 prod() {
