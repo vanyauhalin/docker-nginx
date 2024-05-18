@@ -97,7 +97,8 @@ self() {
 			-out "$self/fullchain.pem" \
 			-subj "/CN=localhost" \
 			-nodes \
-			-x509
+			-x509 \
+			> /dev/null 2>&1
 		cp "$self/fullchain.pem" "$self/chain.pem"
 
 		file="$self/chain.pem"
