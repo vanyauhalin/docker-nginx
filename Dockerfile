@@ -9,7 +9,7 @@ ARG \
 	NGINX_VERSION \
 	NGX_BROTLI_COMMIT \
 	PCRE2_VERSION
-RUN set -e && \
+RUN \
 # Install dependencies
 	apk update && \
 	apk add --no-cache \
