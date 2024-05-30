@@ -116,7 +116,7 @@ RUN \
 FROM alpine:$ALPINE_VERSION
 COPY --from=build /etc/nginx /etc/nginx
 COPY --from=build /usr/sbin/nginx /usr/sbin
-RUN set -e && \
+RUN \
 # Update dependencies
 	apk update && \
 # Create nginx user and group
