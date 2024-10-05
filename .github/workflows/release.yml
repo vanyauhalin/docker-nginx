@@ -38,13 +38,13 @@ jobs:
             LABEL*)
               c=$(echo "$c" | sed 's/^LABEL[[:space:]]*//')
               n=$(echo "$c" | cut -d= -f1 | xargs)
-              v=$(echo "$c" | cut -d= -f2-)
+              v=$(echo "$c" | cut -d= -f2- | sed 's/"//g')
               labels="$labels$n=$v\n"
               ;;
           esac
         done < Dockerfile
-        labels=$(printf '%s' "$labels" | sed 's/%/%25/g; s/\n/%0A/g; s/\r/%0D/g; s/\"/\\"/g')
-        echo "labels=\"$labels\"" >> "$GITHUB_OUTPUT"
+        labels=$(printf '%s' "$labels" | sed 's/%/%25/g; s/\n/%0A/g; s/\r/%0D/g')
+        echo "labels=$labels" >> "$GITHUB_OUTPUT"
 
     - name: Extract metadata for Docker
       id: docker
