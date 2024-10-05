@@ -32,19 +32,18 @@ jobs:
     - name: Extract metadata from Dockerfile
       id: dockerfile
       run: |
-        labels=""
+        echo "labels<<EOF" >> "$GITHUB_ENV"
         while IFS= read -r c; do
           case "$c" in
-            LABEL*)
-              c=$(echo "$c" | sed 's/^LABEL[[:space:]]*//')
-              n=$(echo "$c" | cut -d= -f1 | xargs)
-              v=$(echo "$c" | cut -d= -f2- | sed 's/"//g')
-              labels="$labels$n=$v\n"
-              ;;
+          LABEL*)
+            c=$(echo "$c" | sed 's/^LABEL[[:space:]]*//')
+            n=$(echo "$c" | cut -d= -f1 | xargs)
+            v=$(echo "$c" | cut -d= -f2- | sed 's/"//g')
+            echo "$n=$v" >> "$GITHUB_ENV"
+            ;;
           esac
         done < Dockerfile
-        labels=$(printf '%s' "$labels" | sed 's/%/%25/g; s/\n/%0A/g; s/\r/%0D/g')
-        echo "labels=$labels" >> "$GITHUB_OUTPUT"
+        echo "EOF" >> "$GITHUB_ENV"
 
     - name: Extract metadata for Docker
       id: docker
