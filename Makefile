@@ -7,3 +7,7 @@ help: # Show help information.
 .PHONY: build
 build: # Build the Docker image.
 	@docker build --tag vanyauhalin/nginx .
+
+.PHONY: lint
+lint: # Lint the Dockerfile.
+	@hadolint Dockerfile
