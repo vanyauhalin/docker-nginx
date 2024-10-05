@@ -32,7 +32,7 @@ jobs:
     - name: Extract metadata from Dockerfile
       id: dockerfile
       run: |
-        echo "labels<<EOF" >> "$GITHUB_ENV"
+        echo "DOCKERFILE_LABELS<<EOF" >> "$GITHUB_ENV"
         while IFS= read -r c; do
           case "$c" in
           LABEL*)
@@ -50,7 +50,7 @@ jobs:
       uses: docker/metadata-action@v5
       with:
         images: ${{env.REGISTRY}}/${{env.IMAGE_NAME}}
-        labels: ${{steps.dockerfile.outputs.labels}}
+        labels: ${{env.DOCKERFILE_LABELS}}
 
     - name: Build and push Docker image
       id: push
