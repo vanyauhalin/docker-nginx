@@ -29,11 +29,28 @@ jobs:
         username: ${{github.actor}}
         password: ${{secrets.GITHUB_TOKEN}}
 
+    - name: Extract metadata from Dockerfile
+      id: dockerfile
+      run: |
+        r=""
+        while IFS= read -r c; do
+          case "$c" in
+            LABEL*)
+              c=$(echo "$c" | sed 's/^LABEL[[:space:]]*//')
+              n=$(echo "$c" | cut -d= -f1 | xargs)
+              v=$(echo "$c" | cut -d= -f2-)
+              r="$r$n=$v\n"
+              ;;
+          esac
+        done < Dockerfile
+        echo "labels=$r" ## >> "$GITHUB_OUTPUT"
+
     - name: Extract metadata for Docker
-      id: meta
+      id: docker
       uses: docker/metadata-action@v5
       with:
         images: ${{env.REGISTRY}}/${{env.IMAGE_NAME}}
+        labels: ${{steps.dockerfile.outputs.labels}}
 
     - name: Build and push Docker image
       id: push
@@ -41,8 +58,8 @@ jobs:
       with:
         context: .
         push: true
-        tags: ${{steps.meta.outputs.tags}}
-        labels: ${{steps.meta.outputs.labels}}
+        tags: ${{steps.docker.outputs.tags}}
+        labels: ${{steps.docker.outputs.labels}}
 
     - name: Generate artifact attestation
       uses: actions/attest-build-provenance@v1
