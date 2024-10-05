@@ -114,6 +114,12 @@ RUN \
 			/etc/nginx/uwsgi*
 
 FROM alpine:$ALPINE_VERSION
+LABEL org.opencontainers.image.title="vanyauhalin/nginx"
+LABEL org.opencontainers.image.version="0.0.1"
+LABEL org.opencontainers.image.authors="Ivan Uhalin <vanyauhalin@gmail.com>"
+LABEL org.opencontainers.image.licenses="MIT"
+LABEL org.opencontainers.image.url="https://github.com/vanyauhalin/docker-nginx/"
+LABEL org.opencontainers.image.source="https://github.com/vanyauhalin/docker-nginx/"
 COPY --from=build /etc/nginx /etc/nginx
 COPY --from=build /usr/sbin/nginx /usr/sbin
 RUN \
