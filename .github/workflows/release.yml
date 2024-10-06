@@ -36,9 +36,9 @@ jobs:
         while IFS= read -r c; do
           case "$c" in
           LABEL*)
-            c=$(echo "$c" | sed 's/^LABEL[[:space:]]*//')
-            n=$(echo "$c" | cut -d= -f1 | xargs)
-            v=$(echo "$c" | cut -d= -f2- | sed 's/"//g')
+            c=$(echo "$c" | sed "s/^LABEL[[:space:]]*//")
+            n=$(echo "$c" | cut --delimiter="=" --fields=1)
+            v=$(echo "$c" | cut --delimiter="=" --fields=2- | sed "s/\"//g")
             echo "$n=$v" >> "$GITHUB_ENV"
             ;;
           esac
