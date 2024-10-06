@@ -34,7 +34,7 @@ jobs:
       run: |
         t=$(grep "LABEL org.opencontainers.image.title=" Dockerfile)
         v=$(echo "$t" | cut --delimiter="=" --fields=2- | sed "s/\"//g")
-        echo "IMAGE_NAME=${{github.actor}}/$v" >> "$GITHUB_ENV"
+        echo "IMAGE_NAME=$v" >> "$GITHUB_ENV"
 
     - name: Extract labels from the Dockerfile
       run: |
@@ -55,7 +55,7 @@ jobs:
       id: docker
       uses: docker/metadata-action@v5
       with:
-        images: ${{env.IMAGE_REGISTRY}}/${{env.IMAGE_NAME}}
+        images: ${{env.IMAGE_REGISTRY}}/${{github.actor}}/${{env.IMAGE_NAME}}
         labels: ${{env.IMAGE_LABELS}}
 
     - name: Build and push the Docker image
@@ -70,6 +70,6 @@ jobs:
     - name: Generate an artifact attestation
       uses: actions/attest-build-provenance@v1
       with:
-        subject-name: ${{env.IMAGE_REGISTRY}}/${{env.IMAGE_NAME}}
+        subject-name: ${{env.IMAGE_REGISTRY}}/${{github.actor}}/${{env.IMAGE_NAME}}
         subject-digest: ${{steps.push.outputs.digest}}
         push-to-registry: true
