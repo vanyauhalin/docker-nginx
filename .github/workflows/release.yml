@@ -31,7 +31,6 @@ jobs:
         password: ${{secrets.GITHUB_TOKEN}}
 
     - name: Extract metadata from Dockerfile
-      id: dockerfile
       run: |
         echo "DOCKERFILE_LABELS<<EOF" >> "$GITHUB_ENV"
         while IFS= read -r c; do
