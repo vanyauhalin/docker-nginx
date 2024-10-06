@@ -72,17 +72,3 @@ jobs:
         push: true
         tags: ${{steps.docker.outputs.tags}}
         labels: ${{steps.docker.outputs.labels}}
-
-    - name: Generate an artifact attestation for Docker Hub
-      uses: actions/attest-build-provenance@v1
-      with:
-        subject-name: index.docker.io/${{github.actor}}/${{env.IMAGE_NAME}}
-        subject-digest: ${{steps.push.outputs.digest}}
-        push-to-registry: true
-
-    - name: Generate an artifact attestation for GitHub Container registry
-      uses: actions/attest-build-provenance@v1
-      with:
-        subject-name: ghcr.io/${{github.actor}}/${{env.IMAGE_NAME}}
-        subject-digest: ${{steps.push.outputs.digest}}
-        push-to-registry: true
