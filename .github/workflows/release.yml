@@ -83,5 +83,4 @@ jobs:
       uses: actions/attest-build-provenance@v1
       with:
         subject-path: ${{env.IMAGE_REPOSITORIES}}
-        subject-digest: ${{steps.push.outputs.digest}}
         push-to-registry: true
