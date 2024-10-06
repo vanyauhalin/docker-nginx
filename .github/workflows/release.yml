@@ -14,7 +14,6 @@ on:
 env:
   IMAGE_LABELS: ""
   IMAGE_NAME: ""
-  IMAGE_REGISTRY: ghcr.io
 
 jobs:
   release:
@@ -26,7 +25,7 @@ jobs:
     - name: Log in to the container registry
       uses: docker/login-action@v3
       with:
-        registry: ${{env.IMAGE_REGISTRY}}
+        registry: ghcr.io
         username: ${{github.actor}}
         password: ${{secrets.GITHUB_TOKEN}}
 
@@ -55,7 +54,7 @@ jobs:
       id: docker
       uses: docker/metadata-action@v5
       with:
-        images: ${{env.IMAGE_REGISTRY}}/${{github.actor}}/${{env.IMAGE_NAME}}
+        images: ghcr.io/${{github.actor}}/${{env.IMAGE_NAME}}
         labels: ${{env.IMAGE_LABELS}}
 
     - name: Build and push the Docker image
@@ -70,6 +69,6 @@ jobs:
     - name: Generate an artifact attestation
       uses: actions/attest-build-provenance@v1
       with:
-        subject-name: ${{env.IMAGE_REGISTRY}}/${{github.actor}}/${{env.IMAGE_NAME}}
+        subject-name: ghcr.io/${{github.actor}}/${{env.IMAGE_NAME}}
         subject-digest: ${{steps.push.outputs.digest}}
         push-to-registry: true
