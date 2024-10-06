@@ -14,7 +14,6 @@ on:
 env:
   IMAGE_LABELS: ""
   IMAGE_NAME: ""
-  IMAGE_REPOSITORIES: ""
 
 jobs:
   release:
@@ -57,18 +56,13 @@ jobs:
         done < Dockerfile
         echo "EOF" >> "$GITHUB_ENV"
 
-    - name: Configure image repositories
-      run: |
-        echo "IMAGE_REPOSITORIES<<EOF" >> "$GITHUB_ENV"
-        echo "index.docker.io/${{github.actor}}/${{env.IMAGE_NAME}}" >> "$GITHUB_ENV"
-        echo "ghcr.io/${{github.actor}}/${{env.IMAGE_NAME}}" >> "$GITHUB_ENV"
-        echo "EOF" >> "$GITHUB_ENV"
-
     - name: Extract metadata for Docker
       id: docker
       uses: docker/metadata-action@v5
       with:
-        images: ${{env.IMAGE_REPOSITORIES}}
+        images: |
+          index.docker.io/${{github.actor}}/${{env.IMAGE_NAME}}
+          ghcr.io/${{github.actor}}/${{env.IMAGE_NAME}}
         labels: ${{env.IMAGE_LABELS}}
 
     - name: Build and push the Docker image
@@ -79,8 +73,16 @@ jobs:
         tags: ${{steps.docker.outputs.tags}}
         labels: ${{steps.docker.outputs.labels}}
 
-    - name: Generate an artifact attestation
+    - name: Generate an artifact attestation for Docker Hub
       uses: actions/attest-build-provenance@v1
       with:
-        subject-path: ${{env.IMAGE_REPOSITORIES}}
+        subject-name: index.docker.io/${{github.actor}}/${{env.IMAGE_NAME}}
+        subject-digest: ${{steps.push.outputs.digest}}
+        push-to-registry: true
+
+    - name: Generate an artifact attestation for GitHub Container registry
+      uses: actions/attest-build-provenance@v1
+      with:
+        subject-name: ghcr.io/${{github.actor}}/${{env.IMAGE_NAME}}
+        subject-digest: ${{steps.push.outputs.digest}}
         push-to-registry: true
