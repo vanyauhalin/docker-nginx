@@ -76,7 +76,7 @@ jobs:
     - name: Generate an artifact attestation
       uses: actions/attest-build-provenance@v1
       with:
-        subject-name: |
+        subject-path: |
           index.docker.io/${{github.actor}}/${{env.IMAGE_NAME}}
           ghcr.io/${{github.actor}}/${{env.IMAGE_NAME}}
         subject-digest: ${{steps.push.outputs.digest}}
