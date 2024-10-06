@@ -13,7 +13,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: vanyauhalin/nginx
+  IMAGE_NAME: ""
   DOCKERFILE_LABELS: ""
 
 jobs:
@@ -29,6 +29,12 @@ jobs:
         registry: ${{env.REGISTRY}}
         username: ${{github.actor}}
         password: ${{secrets.GITHUB_TOKEN}}
+
+    - name: Extract image name from Dockerfile
+      run: |
+        t=$(< Dockerfile grep "LABEL org.opencontainers.image.title=")
+        v=$(echo "$t" | cut --delimiter="=" --fields=2- | sed "s/\"//g")
+        echo "IMAGE_NAME=${{github.actor}}/$v" >> "$GITHUB_ENV"
 
     - name: Extract labels from Dockerfile
       run: |
