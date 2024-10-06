@@ -32,7 +32,7 @@ jobs:
 
     - name: Extract the image name from the Dockerfile
       run: |
-        t=$(< Dockerfile grep "LABEL org.opencontainers.image.title=")
+        t=$(grep "LABEL org.opencontainers.image.title=" Dockerfile)
         v=$(echo "$t" | cut --delimiter="=" --fields=2- | sed "s/\"//g")
         echo "IMAGE_NAME=${{github.actor}}/$v" >> "$GITHUB_ENV"
 
