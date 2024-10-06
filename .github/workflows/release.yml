@@ -14,6 +14,7 @@ on:
 env:
   IMAGE_LABELS: ""
   IMAGE_NAME: ""
+  IMAGE_REPOSITORIES: ""
 
 jobs:
   release:
@@ -21,6 +22,13 @@ jobs:
     steps:
     - name: Checkout the repository
       uses: actions/checkout@v4
+
+    - name: Login to Docker Hub
+      uses: docker/login-action@v3
+      with:
+        registry: index.docker.io
+        username: ${{github.actor}}
+        password: ${{secrets.DOCKER_TOKEN}}
 
     - name: Login to GitHub Container registry
       uses: docker/login-action@v3
@@ -50,11 +58,18 @@ jobs:
         done < Dockerfile
         echo "EOF" >> "$GITHUB_ENV"
 
+    - name: Configure image repositories
+      run: |
+        echo "IMAGE_REPOSITORIES<<EOF" >> "$GITHUB_ENV"
+        echo "index.docker.io/${{github.actor}}/${{env.IMAGE_NAME}}" >> "$GITHUB_ENV"
+        echo "ghcr.io/${{github.actor}}/${{env.IMAGE_NAME}}" >> "$GITHUB_ENV"
+        echo "EOF" >> "$GITHUB_ENV"
+
     - name: Extract metadata for Docker
       id: docker
       uses: docker/metadata-action@v5
       with:
-        images: ghcr.io/${{github.actor}}/${{env.IMAGE_NAME}}
+        images: ${{env.IMAGE_REPOSITORIES}}
         labels: ${{env.IMAGE_LABELS}}
 
     - name: Build and push the Docker image
@@ -69,6 +84,6 @@ jobs:
     - name: Generate an artifact attestation
       uses: actions/attest-build-provenance@v1
       with:
-        subject-name: ghcr.io/${{github.actor}}/${{env.IMAGE_NAME}}
+        subject-name: ${{env.IMAGE_REPOSITORIES}}
         subject-digest: ${{steps.push.outputs.digest}}
         push-to-registry: true
