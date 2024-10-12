@@ -1,4 +1,5 @@
 ARG \
+	ACME_VERSION=3.0.9 \
 	ALPINE_VERSION=3.20.0 \
 	NGINX_VERSION=1.25.5 \
 	NGX_BROTLI_COMMIT=a71f9312c2deb28875acc7bacfdd5695a111aa53 \
@@ -114,6 +115,7 @@ RUN \
 			/etc/nginx/uwsgi*
 
 FROM alpine:$ALPINE_VERSION
+ARG ACME_VERSION
 LABEL org.opencontainers.image.title="nginx"
 LABEL org.opencontainers.image.version="0.0.1"
 LABEL org.opencontainers.image.authors="Ivan Uhalin <vanyauhalin@gmail.com>"
@@ -122,9 +124,14 @@ LABEL org.opencontainers.image.url="https://github.com/vanyauhalin/docker-nginx/
 LABEL org.opencontainers.image.source="https://github.com/vanyauhalin/docker-nginx/"
 COPY --from=build /etc/nginx /etc/nginx
 COPY --from=build /usr/sbin/nginx /usr/sbin
+COPY bin/ae.sh /usr/local/bin/ae
+COPY bin/entrypoint.sh /usr/local/bin/entrypoint
 RUN \
-# Update dependencies
-	apk update && \
+# Install dependencies
+	apk add --no-cache --update ca-certificates openssl wget && \
+	wget --no-verbose --output-document /usr/local/bin/acme \
+		"https://raw.githubusercontent.com/acmesh-official/acme.sh/refs/tags/$ACME_VERSION/acme.sh" && \
+	chmod +x /usr/local/bin/acme /usr/local/bin/ae /usr/local/bin/entrypoint && \
 # Create nginx user and group
 	addgroup --system nginx && \
 	adduser \
@@ -142,4 +149,5 @@ RUN \
 		touch error.log && \
 		ln -sf /dev/stderr error.log
 EXPOSE 80 443
+ENTRYPOINT ["entrypoint"]
 CMD ["nginx", "-g", "daemon off;"]
