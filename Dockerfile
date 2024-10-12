@@ -142,5 +142,4 @@ RUN \
 		touch error.log && \
 		ln -sf /dev/stderr error.log
 EXPOSE 80 443
-STOPSIGNAL SIGTERM
 CMD ["nginx", "-g", "daemon off;"]
