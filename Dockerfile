@@ -12,8 +12,7 @@ ARG \
 	PCRE2_VERSION
 RUN \
 # Install dependencies
-	apk update && \
-	apk add --no-cache \
+	apk add --no-cache --update \
 		cmake \
 		g++ \
 		gcc \
@@ -40,9 +39,11 @@ RUN \
 			cmake --build . --config Release --target brotlienc && \
 			cd / && \
 # Build Nginx
-	wget --output-document=- "https://github.com/PCRE2Project/pcre2/releases/download/pcre2-$PCRE2_VERSION/pcre2-$PCRE2_VERSION.tar.gz" | \
+	wget --no-verbose --output-document - \
+		"https://github.com/PCRE2Project/pcre2/releases/download/pcre2-$PCRE2_VERSION/pcre2-$PCRE2_VERSION.tar.gz" | \
 		tar --extract --gzip && \
-	wget --output-document=- "https://nginx.org/download/nginx-$NGINX_VERSION.tar.gz" | \
+	wget --no-verbose --output-document - \
+		"https://nginx.org/download/nginx-$NGINX_VERSION.tar.gz" | \
 		tar --extract --gzip && \
 	cd "nginx-$NGINX_VERSION" && \
 		./configure \
@@ -132,7 +133,7 @@ RUN \
 	wget --no-verbose --output-document /usr/local/bin/acme \
 		"https://raw.githubusercontent.com/acmesh-official/acme.sh/refs/tags/$ACME_VERSION/acme.sh" && \
 	chmod +x /usr/local/bin/acme /usr/local/bin/ae /usr/local/bin/entrypoint && \
-# Create nginx user and group
+# Create Nginx user
 	addgroup --system nginx && \
 	adduser \
 		--disabled-password \
@@ -141,7 +142,7 @@ RUN \
 		--shell /sbin/nologin \
 		--ingroup nginx \
 		nginx && \
-# Forward request and error logs to Docker log collector
+# Forward Nginx logs
 	mkdir /var/log/nginx && \
 	cd /var/log/nginx && \
 		touch access.log && \
