@@ -129,6 +129,7 @@ COPY bin/ae.sh /usr/local/bin/ae
 COPY bin/entrypoint.sh /usr/local/bin/entrypoint
 COPY snippets/brotli.conf /etc/nginx/snippets/brotli.conf
 COPY snippets/gzip.conf /etc/nginx/snippets/gzip.conf
+COPY snippets/proxy.conf /etc/nginx/snippets/proxy.conf
 RUN \
 # Install dependencies
 	apk add --no-cache --update ca-certificates openssl wget && \
