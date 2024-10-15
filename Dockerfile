@@ -127,6 +127,7 @@ COPY --from=build /etc/nginx /etc/nginx
 COPY --from=build /usr/sbin/nginx /usr/sbin
 COPY bin/ae.sh /usr/local/bin/ae
 COPY bin/entrypoint.sh /usr/local/bin/entrypoint
+COPY snippets/gzip.conf /etc/nginx/snippets/gzip.conf
 RUN \
 # Install dependencies
 	apk add --no-cache --update ca-certificates openssl wget && \
