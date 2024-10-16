@@ -35,7 +35,7 @@ AE_FULLCHAIN_BASE="fullchain.pem"
 AE_PRIVKEY_BASE="privkey.pem"
 
 AE_SSL_CERTIFICATE_BASE="ssl-certificate.conf"
-AE_PROXY_CERTIFICATE_BASE="proxy-certificate.conf"
+AE_PROXY_SSL_CERTIFICATE_BASE="proxy-ssl-certificate.conf"
 AE_ACME_CHALLENGE_BASE="acme-challenge.conf"
 AE_SSL_DHPARAM_BASE="ssl-dhparam.conf"
 
@@ -627,9 +627,9 @@ nginx_populate() {
 			nginx_ssl_certificate_conf "$domain" > "$file"
 		fi
 
-		file="$dir/$AE_PROXY_CERTIFICATE_BASE"
+		file="$dir/$AE_PROXY_SSL_CERTIFICATE_BASE"
 		if [ ! -f "$file" ]; then
-			nginx_proxy_certificate_conf "$domain" > "$file"
+			nginx_proxy_ssl_certificate_conf "$domain" > "$file"
 		fi
 	done
 
@@ -667,7 +667,7 @@ nginx_ssl_certificate_conf() {
 	echo "ssl_trusted_certificate $AE_NGINX_SSL_DIR/$1/$AE_CHAIN_BASE;"
 }
 
-nginx_proxy_certificate_conf() {
+nginx_proxy_ssl_certificate_conf() {
 	echo "proxy_ssl_certificate $AE_NGINX_SSL_DIR/$1/$AE_FULLCHAIN_BASE;"
 	echo "proxy_ssl_certificate_key $AE_NGINX_SSL_DIR/$1/$AE_PRIVKEY_BASE;"
 	echo "proxy_ssl_trusted_certificate $AE_NGINX_SSL_DIR/$1/$AE_CHAIN_BASE;"
