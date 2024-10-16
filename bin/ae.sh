@@ -36,7 +36,7 @@ AE_PRIVKEY_BASE="privkey.pem"
 
 AE_CERTIFICATE_BASE="certificate.conf"
 AE_PROXY_CERTIFICATE_BASE="proxy-certificate.conf"
-AE_CHALLENGE_BASE="challenge.conf"
+AE_ACME_CHALLENGE_BASE="acme-challenge.conf"
 AE_SSL_DHPARAM_BASE="ssl-dhparam.conf"
 
 AE_SELF_LOGS_DIR="$AE_LOGS_DIR/ae"
@@ -640,9 +640,9 @@ nginx_populate() {
 		mkdir -p "$dir"
 	fi
 
-	file="$dir/$AE_CHALLENGE_BASE"
+	file="$dir/$AE_ACME_CHALLENGE_BASE"
 	if [ ! -f "$file" ]; then
-		nginx_challenge_conf > "$file"
+		nginx_acme_challenge_conf > "$file"
 	fi
 
 	file="$dir/$AE_SSL_DHPARAM_BASE"
@@ -673,7 +673,7 @@ nginx_proxy_certificate_conf() {
 	echo "proxy_ssl_trusted_certificate $AE_NGINX_SSL_DIR/$1/$AE_CHAIN_BASE;"
 }
 
-nginx_challenge_conf() {
+nginx_acme_challenge_conf() {
 	echo "location /.well-known/acme-challenge {"
 	echo "	root $AE_WEBROOT_DIR/\$server_name;"
 	echo "}"
