@@ -63,57 +63,34 @@ RUN \
 			--user=nginx \
 			--group=nginx \
 			--add-module=/ngx_brotli \
-			--with-threads \
+			--with-compat \
 			--with-file-aio \
+			--with-http_addition_module \
+			--with-http_auth_request_module \
+			--with-http_dav_module \
+			--with-http_flv_module \
+			--with-http_gunzip_module \
+			--with-http_gzip_static_module \
+			--with-http_mp4_module \
+			--with-http_random_index_module \
+			--with-http_realip_module \
+			--with-http_secure_link_module \
+			--with-http_slice_module \
 			--with-http_ssl_module \
+			--with-http_stub_status_module \
+			--with-http_sub_module \
 			--with-http_v2_module \
-			--with-http_v3_module \
-			--without-http_ssi_module \
-			--without-http_userid_module \
-			--without-http_access_module \
-			--without-http_auth_basic_module \
-			--without-http_mirror_module \
-			--without-http_autoindex_module \
-			--without-http_geo_module \
-			--without-http_map_module \
-			--without-http_split_clients_module \
-			--without-http_referer_module \
-			--without-http_fastcgi_module \
-			--without-http_uwsgi_module \
-			--without-http_scgi_module \
-			--without-http_grpc_module \
-			--without-http_memcached_module \
-			--without-http_limit_conn_module \
-			--without-http_limit_req_module \
-			--without-http_empty_gif_module \
-			--without-http_browser_module \
-			--without-http_upstream_hash_module \
-			--without-http_upstream_ip_hash_module \
-			--without-http_upstream_least_conn_module \
-			--without-http_upstream_random_module \
-			--without-http_upstream_keepalive_module \
-			--without-http_upstream_zone_module \
-			--without-mail_pop3_module \
-			--without-mail_imap_module \
-			--without-mail_smtp_module \
-			--without-stream_limit_conn_module \
-			--without-stream_access_module \
-			--without-stream_geo_module \
-			--without-stream_map_module \
-			--without-stream_split_clients_module \
-			--without-stream_return_module \
-			--without-stream_set_module \
-			--without-stream_upstream_hash_module \
-			--without-stream_upstream_least_conn_module \
-			--without-stream_upstream_random_module \
-			--without-stream_upstream_zone_module \
-			--with-pcre="/pcre2-$PCRE2_VERSION" && \
+			--with-mail \
+			--with-mail_ssl_module \
+			--with-pcre-jit \
+			--with-pcre="/pcre2-$PCRE2_VERSION" \
+			--with-stream \
+			--with-stream_realip_module \
+			--with-stream_ssl_module \
+			--with-stream_ssl_preread_module \
+			--with-threads && \
 		make && \
-		make install && \
-		rm -r \
-			/etc/nginx/fastcgi* \
-			/etc/nginx/scgi* \
-			/etc/nginx/uwsgi*
+		make install
 
 FROM alpine:$ALPINE_VERSION
 ARG ACME_VERSION
