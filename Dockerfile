@@ -128,6 +128,7 @@ COPY --from=build /usr/sbin/nginx /usr/sbin
 COPY bin/ae.sh /usr/local/bin/ae
 COPY bin/entrypoint.sh /usr/local/bin/entrypoint
 COPY snippets/brotli.conf /etc/nginx/snippets/brotli.conf
+COPY snippets/force-https.conf /etc/nginx/snippets/force-https.conf
 COPY snippets/gzip.conf /etc/nginx/snippets/gzip.conf
 COPY snippets/proxy.conf /etc/nginx/snippets/proxy.conf
 RUN \
