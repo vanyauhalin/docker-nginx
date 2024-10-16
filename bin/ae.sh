@@ -22,6 +22,7 @@ AE_TEST_SERVER="letsencrypt_test"
 AE_ACME_CONFIG_DIR="/etc/acme"
 AE_ACME_HOME_DIR="$HOME/.acme.sh"
 AE_NGINX_CONFIG_DIR="/etc/nginx"
+AE_NGINX_SNIPPETS_DIR="$AE_NGINX_CONFIG_DIR/snippets"
 AE_LOGS_DIR="/var/log"
 AE_WEBROOT_DIR="/var/www"
 AE_BIN_DIR="/usr/local/bin"
@@ -39,7 +40,6 @@ AE_INTERMEDIATE_BASE="intermediate.conf"
 AE_PROXY_INTERMEDIATE_BASE="proxy-intermediate.conf"
 AE_REDIRECT_BASE="redirect.conf"
 
-AE_ACME_SNIPPETS_DIR="$AE_NGINX_CONFIG_DIR/snippets/acme"
 AE_ACME_SSL_DIR="$AE_NGINX_CONFIG_DIR/ssl/acme"
 AE_SELF_LOGS_DIR="$AE_LOGS_DIR/ae"
 AE_SELF_OUTPUT_FILE="$AE_SELF_LOGS_DIR/output.log"
@@ -619,7 +619,7 @@ nginx_populate() {
 	IFS=","
 
 	for domain in $AE_DOMAINS; do
-		dir="$AE_ACME_SNIPPETS_DIR/$domain"
+		dir="$AE_NGINX_SNIPPETS_DIR/$domain"
 		if [ ! -d "$dir" ]; then
 			mkdir -p "$dir"
 		fi
@@ -637,7 +637,7 @@ nginx_populate() {
 
 	IFS="$ifs"
 
-	dir="$AE_ACME_SNIPPETS_DIR"
+	dir="$AE_NGINX_SNIPPETS_DIR"
 	if [ ! -d "$dir" ]; then
 		mkdir -p "$dir"
 	fi
