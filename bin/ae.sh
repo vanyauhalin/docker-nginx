@@ -40,8 +40,8 @@ AE_REDIRECT_BASE="redirect.conf"
 
 AE_ACME_SNIPPETS_DIR="$AE_NGINX_CONFIG_DIR/snippets/acme"
 AE_ACME_SSL_DIR="$AE_NGINX_CONFIG_DIR/ssl/acme"
-AE_ACME_LOGS_DIR="$AE_LOGS_DIR/acme"
-AE_ACME_OUTPUT_FILE="$AE_ACME_LOGS_DIR/output.log"
+AE_SELF_LOGS_DIR="$AE_LOGS_DIR/ae"
+AE_SELF_OUTPUT_FILE="$AE_SELF_LOGS_DIR/output.log"
 AE_ACME_WEBROOT_DIR="$AE_WEBROOT_DIR/acme"
 AE_ACME_HOME_DIR="$HOME/.acme.sh"
 
@@ -225,11 +225,11 @@ main() {
 	done
 
 	if [ "$pipe" -eq 1 ]; then
-		if [ ! -d "$AE_ACME_LOGS_DIR" ]; then
-			mkdir -p "$AE_ACME_LOGS_DIR"
+		if [ ! -d "$AE_SELF_LOGS_DIR" ]; then
+			mkdir -p "$AE_SELF_LOGS_DIR"
 		fi
-		if [ ! -f "$AE_ACME_OUTPUT_FILE" ]; then
-			touch "$AE_ACME_OUTPUT_FILE"
+		if [ ! -f "$AE_SELF_OUTPUT_FILE" ]; then
+			touch "$AE_SELF_OUTPUT_FILE"
 		fi
 	fi
 
@@ -243,35 +243,35 @@ main() {
 		;;
 	"install")
 		if [ "$pipe" -eq 1 ]; then
-			ae_install >> "$AE_ACME_OUTPUT_FILE" 2>&1
+			ae_install >> "$AE_SELF_OUTPUT_FILE" 2>&1
 		else
 			ae_install
 		fi
 		;;
 	"obtain")
 		if [ "$pipe" -eq 1 ]; then
-			ae_obtain "$guard" "$skip" "$type" >> "$AE_ACME_OUTPUT_FILE" 2>&1
+			ae_obtain "$guard" "$skip" "$type" >> "$AE_SELF_OUTPUT_FILE" 2>&1
 		else
 			ae_obtain "$guard" "$skip" "$type"
 		fi
 		;;
 	"schedule")
 		if [ "$pipe" -eq 1 ]; then
-			ae_schedule >> "$AE_ACME_OUTPUT_FILE" 2>&1
+			ae_schedule >> "$AE_SELF_OUTPUT_FILE" 2>&1
 		else
 			ae_schedule
 		fi
 		;;
 	"trigger")
 		if [ "$pipe" -eq 1 ]; then
-			ae_trigger >> "$AE_ACME_OUTPUT_FILE" 2>&1
+			ae_trigger >> "$AE_SELF_OUTPUT_FILE" 2>&1
 		else
 			ae_trigger
 		fi
 		;;
 	"renew")
 		if [ "$pipe" -eq 1 ]; then
-			ae_renew "$force" >> "$AE_ACME_OUTPUT_FILE" 2>&1
+			ae_renew "$force" >> "$AE_SELF_OUTPUT_FILE" 2>&1
 		else
 			ae_renew "$force"
 		fi
@@ -459,7 +459,7 @@ ae_logs() {
 	fi
 
 	# shellcheck disable=SC2086
-	tail $options "$AE_ACME_OUTPUT_FILE"
+	tail $options "$AE_SELF_OUTPUT_FILE"
 }
 
 ae_env() {
