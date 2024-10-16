@@ -42,7 +42,6 @@ AE_ACME_SNIPPETS_DIR="$AE_NGINX_CONFIG_DIR/snippets/acme"
 AE_ACME_SSL_DIR="$AE_NGINX_CONFIG_DIR/ssl/acme"
 AE_SELF_LOGS_DIR="$AE_LOGS_DIR/ae"
 AE_SELF_OUTPUT_FILE="$AE_SELF_LOGS_DIR/output.log"
-AE_ACME_WEBROOT_DIR="$AE_WEBROOT_DIR/acme"
 AE_ACME_HOME_DIR="$HOME/.acme.sh"
 
 ae_help() {
@@ -562,7 +561,7 @@ acme_install() {
 }
 
 acme_test() {
-	dir="$AE_ACME_WEBROOT_DIR/$1"
+	dir="$AE_WEBROOT_DIR/$1"
 	if [ ! -d "$dir" ]; then
 		mkdir -p "$dir"
 	fi
@@ -577,7 +576,7 @@ acme_test() {
 }
 
 acme_prod() {
-	dir="$AE_ACME_WEBROOT_DIR/$1"
+	dir="$AE_WEBROOT_DIR/$1"
 	if [ ! -d "$dir" ]; then
 		mkdir -p "$dir"
 	fi
@@ -688,7 +687,7 @@ nginx_proxy_certificate_conf() {
 
 nginx_challenge_conf() {
 	echo "location /.well-known/acme-challenge {"
-	echo "	root $AE_ACME_WEBROOT_DIR/\$server_name;"
+	echo "	root $AE_WEBROOT_DIR/\$server_name;"
 	echo "}"
 }
 
