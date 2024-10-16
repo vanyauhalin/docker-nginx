@@ -129,7 +129,7 @@ COPY bin/ae.sh /usr/local/bin/ae
 COPY bin/entrypoint.sh /usr/local/bin/entrypoint
 COPY snippets/brotli-options.conf /etc/nginx/snippets/brotli-options.conf
 COPY snippets/force-https.conf /etc/nginx/snippets/force-https.conf
-COPY snippets/gzip.conf /etc/nginx/snippets/gzip.conf
+COPY snippets/gzip-options.conf /etc/nginx/snippets/gzip-options.conf
 COPY snippets/proxy-options.conf /etc/nginx/snippets/proxy-options.conf
 COPY snippets/proxy-ssl-options.conf /etc/nginx/snippets/proxy-ssl-options.conf
 COPY snippets/ssl-options.conf /etc/nginx/snippets/ssl-options.conf
