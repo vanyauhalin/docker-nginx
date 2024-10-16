@@ -38,7 +38,6 @@ AE_CERTIFICATE_BASE="certificate.conf"
 AE_PROXY_CERTIFICATE_BASE="proxy-certificate.conf"
 AE_CHALLENGE_BASE="challenge.conf"
 AE_SSL_DHPARAM_BASE="ssl-dhparam.conf"
-AE_PROXY_INTERMEDIATE_BASE="proxy-intermediate.conf"
 
 AE_SELF_LOGS_DIR="$AE_LOGS_DIR/ae"
 AE_SELF_LOG_FILE="$AE_SELF_LOGS_DIR/output.log"
@@ -651,11 +650,6 @@ nginx_populate() {
 		nginx_ssl_dhparam_conf > "$file"
 	fi
 
-	file="$dir/$AE_PROXY_INTERMEDIATE_BASE"
-	if [ ! -f "$file" ]; then
-		nginx_proxy_intermediate_conf > "$file"
-	fi
-
 	dir="$AE_NGINX_SSL_DIR"
 	if [ ! -d "$dir" ]; then
 		mkdir -p "$dir"
@@ -687,11 +681,6 @@ nginx_challenge_conf() {
 
 nginx_ssl_dhparam_conf() {
 	echo "ssl_dhparam $AE_NGINX_SSL_DIR/$AE_DHPARAM_BASE;"
-}
-
-nginx_proxy_intermediate_conf() {
-	echo "proxy_ssl_ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:DHE-RSA-CHACHA20-POLY1305;"
-	echo "proxy_ssl_protocols TLSv1.2 TLSv1.3;"
 }
 
 nginx_test() {
