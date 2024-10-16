@@ -37,7 +37,7 @@ AE_PRIVKEY_BASE="privkey.pem"
 AE_CERTIFICATE_BASE="certificate.conf"
 AE_PROXY_CERTIFICATE_BASE="proxy-certificate.conf"
 AE_CHALLENGE_BASE="challenge.conf"
-AE_INTERMEDIATE_BASE="intermediate.conf"
+AE_SSL_DHPARAM_BASE="ssl-dhparam.conf"
 AE_PROXY_INTERMEDIATE_BASE="proxy-intermediate.conf"
 
 AE_SELF_LOGS_DIR="$AE_LOGS_DIR/ae"
@@ -646,9 +646,9 @@ nginx_populate() {
 		nginx_challenge_conf > "$file"
 	fi
 
-	file="$dir/$AE_INTERMEDIATE_BASE"
+	file="$dir/$AE_SSL_DHPARAM_BASE"
 	if [ ! -f "$file" ]; then
-		nginx_intermediate_conf > "$file"
+		nginx_ssl_dhparam_conf > "$file"
 	fi
 
 	file="$dir/$AE_PROXY_INTERMEDIATE_BASE"
@@ -685,15 +685,8 @@ nginx_challenge_conf() {
 	echo "}"
 }
 
-nginx_intermediate_conf() {
-	echo "ssl_ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:DHE-RSA-CHACHA20-POLY1305;"
+nginx_ssl_dhparam_conf() {
 	echo "ssl_dhparam $AE_NGINX_SSL_DIR/$AE_DHPARAM_BASE;"
-	echo "ssl_prefer_server_ciphers off;"
-	echo "ssl_protocols TLSv1.2 TLSv1.3;"
-	echo "ssl_session_cache shared:MozSSL:10m;"
-	echo "ssl_session_timeout 1d;"
-	echo "ssl_stapling on;"
-	echo "ssl_stapling_verify on;"
 }
 
 nginx_proxy_intermediate_conf() {
