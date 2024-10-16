@@ -34,7 +34,7 @@ AE_DHPARAM_BASE="dhparam.pem"
 AE_FULLCHAIN_BASE="fullchain.pem"
 AE_PRIVKEY_BASE="privkey.pem"
 
-AE_CERTIFICATE_BASE="certificate.conf"
+AE_SSL_CERTIFICATE_BASE="ssl-certificate.conf"
 AE_PROXY_CERTIFICATE_BASE="proxy-certificate.conf"
 AE_ACME_CHALLENGE_BASE="acme-challenge.conf"
 AE_SSL_DHPARAM_BASE="ssl-dhparam.conf"
@@ -622,9 +622,9 @@ nginx_populate() {
 			mkdir -p "$dir"
 		fi
 
-		file="$dir/$AE_CERTIFICATE_BASE"
+		file="$dir/$AE_SSL_CERTIFICATE_BASE"
 		if [ ! -f "$file" ]; then
-			nginx_certificate_conf "$domain" > "$file"
+			nginx_ssl_certificate_conf "$domain" > "$file"
 		fi
 
 		file="$dir/$AE_PROXY_CERTIFICATE_BASE"
@@ -661,7 +661,7 @@ nginx_populate() {
 	fi
 }
 
-nginx_certificate_conf() {
+nginx_ssl_certificate_conf() {
 	echo "ssl_certificate $AE_NGINX_SSL_DIR/$1/$AE_FULLCHAIN_BASE;"
 	echo "ssl_certificate_key $AE_NGINX_SSL_DIR/$1/$AE_PRIVKEY_BASE;"
 	echo "ssl_trusted_certificate $AE_NGINX_SSL_DIR/$1/$AE_CHAIN_BASE;"
