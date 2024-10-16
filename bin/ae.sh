@@ -23,6 +23,7 @@ AE_ACME_CONFIG_DIR="/etc/acme"
 AE_ACME_HOME_DIR="$HOME/.acme.sh"
 AE_NGINX_CONFIG_DIR="/etc/nginx"
 AE_NGINX_SNIPPETS_DIR="$AE_NGINX_CONFIG_DIR/snippets"
+AE_NGINX_SSL_DIR="$AE_NGINX_CONFIG_DIR/ssl"
 AE_LOGS_DIR="/var/log"
 AE_WEBROOT_DIR="/var/www"
 AE_BIN_DIR="/usr/local/bin"
@@ -40,7 +41,6 @@ AE_INTERMEDIATE_BASE="intermediate.conf"
 AE_PROXY_INTERMEDIATE_BASE="proxy-intermediate.conf"
 AE_REDIRECT_BASE="redirect.conf"
 
-AE_ACME_SSL_DIR="$AE_NGINX_CONFIG_DIR/ssl/acme"
 AE_SELF_LOGS_DIR="$AE_LOGS_DIR/ae"
 AE_SELF_OUTPUT_FILE="$AE_SELF_LOGS_DIR/output.log"
 
@@ -335,7 +335,7 @@ ae_obtain() {
 	IFS=","
 
 	for domain in $AE_DOMAINS; do
-		if [ "$guard" -eq 1 ] && [ -d "$AE_ACME_SSL_DIR/$domain" ]; then
+		if [ "$guard" -eq 1 ] && [ -d "$AE_NGINX_SSL_DIR/$domain" ]; then
 			continue
 		fi
 
@@ -522,7 +522,7 @@ ae_nginx() {
 }
 
 openssl_self() {
-	dir="$AE_ACME_SSL_DIR/$1"
+	dir="$AE_NGINX_SSL_DIR/$1"
 	if [ ! -d "$dir" ]; then
 		mkdir -p "$dir"
 	fi
@@ -549,7 +549,7 @@ openssl_dhparam() {
 openssl_check() {
 	openssl x509 \
 		-checkend "$((AE_THRESHOLD_DAYS * 24 * 60 * 60))" \
-		-in "$AE_ACME_SSL_DIR/$1/$AE_FULLCHAIN_BASE" \
+		-in "$AE_NGINX_SSL_DIR/$1/$AE_FULLCHAIN_BASE" \
 		-noout
 }
 
@@ -588,7 +588,7 @@ acme_prod() {
 		--server "$AE_SERVER" \
 		--webroot "$dir"
 
-	dir="$AE_ACME_SSL_DIR/$1"
+	dir="$AE_NGINX_SSL_DIR/$1"
 	if [ ! -d "$dir" ]; then
 		mkdir -p "$dir"
 	fi
@@ -662,7 +662,7 @@ nginx_populate() {
 		nginx_redirect_conf > "$file"
 	fi
 
-	dir="$AE_ACME_SSL_DIR"
+	dir="$AE_NGINX_SSL_DIR"
 	if [ ! -d "$dir" ]; then
 		mkdir -p "$dir"
 	fi
@@ -674,15 +674,15 @@ nginx_populate() {
 }
 
 nginx_certificate_conf() {
-	echo "ssl_certificate $AE_ACME_SSL_DIR/$1/$AE_FULLCHAIN_BASE;"
-	echo "ssl_certificate_key $AE_ACME_SSL_DIR/$1/$AE_PRIVKEY_BASE;"
-	echo "ssl_trusted_certificate $AE_ACME_SSL_DIR/$1/$AE_CHAIN_BASE;"
+	echo "ssl_certificate $AE_NGINX_SSL_DIR/$1/$AE_FULLCHAIN_BASE;"
+	echo "ssl_certificate_key $AE_NGINX_SSL_DIR/$1/$AE_PRIVKEY_BASE;"
+	echo "ssl_trusted_certificate $AE_NGINX_SSL_DIR/$1/$AE_CHAIN_BASE;"
 }
 
 nginx_proxy_certificate_conf() {
-	echo "proxy_ssl_certificate $AE_ACME_SSL_DIR/$1/$AE_FULLCHAIN_BASE;"
-	echo "proxy_ssl_certificate_key $AE_ACME_SSL_DIR/$1/$AE_PRIVKEY_BASE;"
-	echo "proxy_ssl_trusted_certificate $AE_ACME_SSL_DIR/$1/$AE_CHAIN_BASE;"
+	echo "proxy_ssl_certificate $AE_NGINX_SSL_DIR/$1/$AE_FULLCHAIN_BASE;"
+	echo "proxy_ssl_certificate_key $AE_NGINX_SSL_DIR/$1/$AE_PRIVKEY_BASE;"
+	echo "proxy_ssl_trusted_certificate $AE_NGINX_SSL_DIR/$1/$AE_CHAIN_BASE;"
 }
 
 nginx_challenge_conf() {
@@ -693,7 +693,7 @@ nginx_challenge_conf() {
 
 nginx_intermediate_conf() {
 	echo "ssl_ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:DHE-RSA-CHACHA20-POLY1305;"
-	echo "ssl_dhparam $AE_ACME_SSL_DIR/$AE_DHPARAM_BASE;"
+	echo "ssl_dhparam $AE_NGINX_SSL_DIR/$AE_DHPARAM_BASE;"
 	echo "ssl_prefer_server_ciphers off;"
 	echo "ssl_protocols TLSv1.2 TLSv1.3;"
 	echo "ssl_session_cache shared:MozSSL:10m;"
