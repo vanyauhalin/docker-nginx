@@ -20,6 +20,7 @@ AE_SERVER="letsencrypt"
 AE_TEST_SERVER="letsencrypt_test"
 
 AE_ACME_CONFIG_DIR="/etc/acme"
+AE_ACME_HOME_DIR="$HOME/.acme.sh"
 AE_NGINX_CONFIG_DIR="/etc/nginx"
 AE_LOGS_DIR="/var/log"
 AE_WEBROOT_DIR="/var/www"
@@ -42,7 +43,6 @@ AE_ACME_SNIPPETS_DIR="$AE_NGINX_CONFIG_DIR/snippets/acme"
 AE_ACME_SSL_DIR="$AE_NGINX_CONFIG_DIR/ssl/acme"
 AE_SELF_LOGS_DIR="$AE_LOGS_DIR/ae"
 AE_SELF_OUTPUT_FILE="$AE_SELF_LOGS_DIR/output.log"
-AE_ACME_HOME_DIR="$HOME/.acme.sh"
 
 ae_help() {
 	echo "Usage: ae [options] <subcommand>"
