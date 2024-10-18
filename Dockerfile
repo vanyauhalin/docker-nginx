@@ -104,7 +104,7 @@ LABEL org.opencontainers.image.source="https://github.com/vanyauhalin/docker-ngi
 COPY --from=build /etc/nginx /etc/nginx
 COPY --from=build /usr/bin/envsubst /usr/bin/envsubst
 COPY --from=build /usr/lib/libintl.so.8 /usr/lib/libintl.so.8
-COPY --from=build /usr/sbin/nginx /usr/sbin
+COPY --from=build /usr/sbin/nginx /usr/sbin/nginx
 COPY bin/ae.sh /usr/local/bin/ae
 COPY bin/entrypoint.sh /usr/local/bin/entrypoint
 COPY bin/ng.sh /usr/local/bin/ng
