@@ -121,6 +121,8 @@ COPy snippets/ssl-headers.conf /etc/nginx/snippets/ssl-headers.conf
 COPY snippets/ssl-options.conf /etc/nginx/snippets/ssl-options.conf
 RUN \
 # Install dependencies
+# acme.sh does not work with busybox wget
+# https://github.com/acmesh-official/acme.sh/issues/5319/
 	apk add --no-cache --update ca-certificates openssl wget && \
 	wget --no-verbose --output-document /usr/local/bin/acme \
 		"https://raw.githubusercontent.com/acmesh-official/acme.sh/refs/tags/$ACME_VERSION/acme.sh" && \
