@@ -12,7 +12,7 @@ http {
 	include snippets/map-non-www.conf;
 
 	server {
-		server_name www.example.com;
+		server_name ${NGINX_SERVER_ALIAS};
 		listen 80;
 
 		include snippets/force-https.conf;
@@ -20,7 +20,7 @@ http {
 	}
 
 	server {
-		server_name example.com;
+		server_name ${NGINX_SERVER_NAME};
 		listen 80;
 
 		include snippets/force-https.conf;
@@ -28,24 +28,24 @@ http {
 	}
 
 	server {
-		server_name www.example.com;
+		server_name ${NGINX_SERVER_ALIAS};
 		listen 443 ssl;
 
 		include snippets/force-non-www.conf;
 		include snippets/ssl-options.conf;
 		include snippets/ssl-dhparam.conf;
 		include snippets/ssl-headers.conf;
-		include snippets/www.example.com/ssl-certificate.conf;
+		include snippets/${NGINX_SERVER_ALIAS}/ssl-certificate.conf;
 	}
 
 	server {
-		server_name example.com;
+		server_name ${NGINX_SERVER_NAME};
 		listen 443 ssl;
 
 		include snippets/ssl-options.conf;
 		include snippets/ssl-dhparam.conf;
 		include snippets/ssl-headers.conf;
-		include snippets/example.com/ssl-certificate.conf;
+		include snippets/${NGINX_SERVER_NAME}/ssl-certificate.conf;
 
 		location / {
 			root html;
@@ -56,7 +56,7 @@ http {
 
 		# 	include snippets/proxy-options.conf;
 		# 	include snippets/proxy-ssl-options.conf;
-		# 	include snippets/example.com/proxy-ssl-certificate.conf;
+		# 	include snippets/${NGINX_SERVER_NAME}/proxy-ssl-certificate.conf;
 		# }
 	}
 }
