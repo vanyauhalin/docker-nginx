@@ -489,6 +489,16 @@ ae_nginx() {
 		log "INFO Successfully populated Nginx configuration"
 
 		if [ "$skip" -eq 0 ]; then
+			log "INFO Rendering Nginx configuration"
+
+			ng render || status=$?
+			if [ $status -ne 0 ]; then
+				log "ERROR Failed to render Nginx configuration with status '$status'"
+				break
+			fi
+
+			log "INFO Successfully rendered Nginx configuration"
+
 			log "INFO Testing Nginx configuration"
 
 			nginx_test || status=$?

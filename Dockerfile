@@ -16,6 +16,7 @@ RUN \
 		cmake \
 		g++ \
 		gcc \
+		gettext \
 		git \
 		linux-headers \
 		make \
@@ -101,9 +102,12 @@ LABEL org.opencontainers.image.licenses="MIT"
 LABEL org.opencontainers.image.url="https://github.com/vanyauhalin/docker-nginx/"
 LABEL org.opencontainers.image.source="https://github.com/vanyauhalin/docker-nginx/"
 COPY --from=build /etc/nginx /etc/nginx
+COPY --from=build /usr/bin/envsubst /usr/bin/envsubst
+COPY --from=build /usr/lib/libintl.so.8 /usr/lib/libintl.so.8
 COPY --from=build /usr/sbin/nginx /usr/sbin
 COPY bin/ae.sh /usr/local/bin/ae
 COPY bin/entrypoint.sh /usr/local/bin/entrypoint
+COPY bin/ng.sh /usr/local/bin/ng
 COPY snippets/base-headers.conf /etc/nginx/snippets/base-headers.conf
 COPY snippets/base-options.conf /etc/nginx/snippets/base-options.conf
 COPY snippets/brotli-options.conf /etc/nginx/snippets/brotli-options.conf
@@ -120,7 +124,11 @@ RUN \
 	apk add --no-cache --update ca-certificates openssl wget && \
 	wget --no-verbose --output-document /usr/local/bin/acme \
 		"https://raw.githubusercontent.com/acmesh-official/acme.sh/refs/tags/$ACME_VERSION/acme.sh" && \
-	chmod +x /usr/local/bin/acme /usr/local/bin/ae /usr/local/bin/entrypoint && \
+	chmod +x \
+		/usr/local/bin/acme \
+		/usr/local/bin/ae \
+		/usr/local/bin/entrypoint \
+		/usr/local/bin/ng && \
 # Create Nginx user
 	addgroup --system nginx && \
 	adduser \
