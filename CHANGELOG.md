@@ -15,5 +15,5 @@ This is the first, initial release. It is probably stable, but I want to test it
 
 <!-- Footnotes -->
 
-[Unreleased]: https://github.com/vanyauhalin/docker-nginx/compare/v0.0.1...HEAD
-[0.0.1]: https://github.com/vanyauhalin/docker-nginx/releases/tag/v0.0.1
+[Unreleased]: https://github.com/vanyauhalin/docker-nginx/compare/v0.0.1...HEAD/
+[0.0.1]: https://github.com/vanyauhalin/docker-nginx/releases/tag/v0.0.1/
