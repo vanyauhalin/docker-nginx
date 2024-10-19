@@ -64,6 +64,12 @@ jobs:
           index.docker.io/${{github.actor}}/${{env.IMAGE_NAME}}
           ghcr.io/${{github.actor}}/${{env.IMAGE_NAME}}
         labels: ${{env.IMAGE_LABELS}}
+        tags: |
+          type=semver,pattern={{major}}
+          type=semver,pattern={{major}}.{{minor}}
+          type=semver,pattern={{major}}.{{minor}}.{{patch}}
+          type=sha,format=short
+          type=sha,format=long
 
     - name: Build and push the Docker image
       id: push
