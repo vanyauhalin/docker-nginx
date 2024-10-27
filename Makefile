@@ -10,6 +10,6 @@ build: # Build the Docker image
 
 .PHONY: lint
 lint: # Lint the Dockerfile and shell scripts
-	@hadolint --ignore DL3003 --ignore DL3018 --ignore DL4006 Dockerfile
+	@hadolint Dockerfile
 	@shellcheck **/*.sh
-	@shfmt --diff --posix --space-redirects **/*.sh
+	@shfmt --diff **/*.sh
