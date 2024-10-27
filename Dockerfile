@@ -116,6 +116,7 @@ COPY snippets/force-https.conf /etc/nginx/snippets/force-https.conf
 COPY snippets/force-non-www.conf /etc/nginx/snippets/force-non-www.conf
 COPY snippets/gzip-options.conf /etc/nginx/snippets/gzip-options.conf
 COPY snippets/map-non-www.conf /etc/nginx/snippets/map-non-www.conf
+COPY snippets/proxy-headers.conf /etc/nginx/snippets/proxy-headers.conf
 COPY snippets/proxy-options.conf /etc/nginx/snippets/proxy-options.conf
 COPY snippets/proxy-ssl-options.conf /etc/nginx/snippets/proxy-ssl-options.conf
 COPy snippets/ssl-headers.conf /etc/nginx/snippets/ssl-headers.conf
