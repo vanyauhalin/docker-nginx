@@ -1,0 +1,9 @@
+[tools]
+hadolint = "prefix:2"
+shellcheck = "prefix:0"
+shfmt = "prefix:3"
+
+# The tools listed below are used in the project.
+# However, you probably installed them globally.
+# docker-desktop = "prefix:4"
+# make = "prefix:4" # GNU
