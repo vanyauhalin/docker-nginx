@@ -1,7 +1,6 @@
 name: Release a Docker image
 
 permissions:
-  attestations: write
   contents: write
   id-token: write
   packages: write
