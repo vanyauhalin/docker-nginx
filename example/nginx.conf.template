@@ -15,6 +15,7 @@ http {
 		server_name ${NGINX_SERVER_ALIAS};
 		listen 80;
 		listen [::]:80;
+		http2 on;
 
 		include snippets/force-https.conf;
 		include snippets/acme-challenge.conf;
@@ -24,6 +25,7 @@ http {
 		server_name ${NGINX_SERVER_NAME};
 		listen 80;
 		listen [::]:80;
+		http2 on;
 
 		include snippets/force-https.conf;
 		include snippets/acme-challenge.conf;
@@ -33,6 +35,7 @@ http {
 		server_name ${NGINX_SERVER_ALIAS};
 		listen 443 ssl;
 		listen [::]:443 ssl;
+		http2 on;
 
 		include snippets/force-non-www.conf;
 		include snippets/ssl-options.conf;
@@ -45,6 +48,7 @@ http {
 		server_name ${NGINX_SERVER_NAME};
 		listen 443 ssl;
 		listen [::]:443 ssl;
+		http2 on;
 
 		include snippets/ssl-options.conf;
 		include snippets/ssl-dhparam.conf;
