@@ -119,7 +119,7 @@ COPY snippets/map-non-www.conf /etc/nginx/snippets/map-non-www.conf
 COPY snippets/proxy-headers.conf /etc/nginx/snippets/proxy-headers.conf
 COPY snippets/proxy-options.conf /etc/nginx/snippets/proxy-options.conf
 COPY snippets/proxy-ssl-options.conf /etc/nginx/snippets/proxy-ssl-options.conf
-COPy snippets/ssl-headers.conf /etc/nginx/snippets/ssl-headers.conf
+COPY snippets/ssl-headers.conf /etc/nginx/snippets/ssl-headers.conf
 COPY snippets/ssl-options.conf /etc/nginx/snippets/ssl-options.conf
 RUN \
 # Install dependencies
