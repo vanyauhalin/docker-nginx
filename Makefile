@@ -11,5 +11,5 @@ build: # Build the Docker image
 .PHONY: lint
 lint: # Lint the Dockerfile and shell scripts
 	@hadolint Dockerfile
-	@shellcheck **/*.sh
+	@shellcheck --external-sources **/*.sh
 	@shfmt --diff **/*.sh

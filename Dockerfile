@@ -109,6 +109,8 @@ COPY --from=build /usr/sbin/nginx /usr/sbin/nginx
 COPY bin/ae.sh /usr/local/bin/ae
 COPY bin/entrypoint.sh /usr/local/bin/entrypoint
 COPY bin/ng.sh /usr/local/bin/ng
+COPY lib/color.sh /usr/local/lib/color.sh
+COPY lib/log.sh /usr/local/lib/log.sh
 COPY snippets/base-headers.conf /etc/nginx/snippets/base-headers.conf
 COPY snippets/base-options.conf /etc/nginx/snippets/base-options.conf
 COPY snippets/brotli-options.conf /etc/nginx/snippets/brotli-options.conf
@@ -121,6 +123,7 @@ COPY snippets/proxy-options.conf /etc/nginx/snippets/proxy-options.conf
 COPY snippets/proxy-ssl-options.conf /etc/nginx/snippets/proxy-ssl-options.conf
 COPY snippets/ssl-headers.conf /etc/nginx/snippets/ssl-headers.conf
 COPY snippets/ssl-options.conf /etc/nginx/snippets/ssl-options.conf
+ENV LIB_DIR /usr/local/lib
 RUN \
 # Install dependencies
 # acme.sh does not work with busybox wget

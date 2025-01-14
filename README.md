@@ -145,11 +145,14 @@ Environment variables:
 │  ├─ bin
 │  │  └─ envsubst
 │  ├─ local
-│  │  └─ bin
-│  │     ├─ acme
-│  │     ├─ ae
-│  │     ├─ entrypoint
-│  │     └─ ng
+│  │  ├─ bin
+│  │  │  ├─ acme
+│  │  │  ├─ ae
+│  │  │  ├─ entrypoint
+│  │  │  └─ ng
+│  │  └─ lib
+│  │     ├─ color.sh
+│  │     └─ log.sh
 │  └─ sbin
 │     └─ nginx
 ├─ log
