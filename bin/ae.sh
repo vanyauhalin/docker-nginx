@@ -14,7 +14,7 @@ AE_USER_AGENT="me.vanyauhalin.docker-nginx.ae $AE_VERSION"
 : "${AE_DOMAINS:=""}"
 : "${AE_EMAIL:=""}"
 : "${AE_KEY_SIZE:=2048}"
-: "${AE_HEALTHCHECKS_URL:=}"
+: "${AE_HEALTHCHECKS_URL:=""}"
 
 AE_CRON_ENTRY="$AE_CRON	ae -p trigger"
 AE_TEST_DAYS=1
