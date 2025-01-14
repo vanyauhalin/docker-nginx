@@ -117,6 +117,7 @@ COPY snippets/brotli-options.conf /etc/nginx/snippets/brotli-options.conf
 COPY snippets/force-https.conf /etc/nginx/snippets/force-https.conf
 COPY snippets/force-non-www.conf /etc/nginx/snippets/force-non-www.conf
 COPY snippets/gzip-options.conf /etc/nginx/snippets/gzip-options.conf
+COPY snippets/map-connection.conf /etc/nginx/snippets/map-connection.conf
 COPY snippets/map-non-www.conf /etc/nginx/snippets/map-non-www.conf
 COPY snippets/proxy-headers.conf /etc/nginx/snippets/proxy-headers.conf
 COPY snippets/proxy-options.conf /etc/nginx/snippets/proxy-options.conf

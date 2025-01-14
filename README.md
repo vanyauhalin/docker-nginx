@@ -127,6 +127,7 @@ Environment variables:
 │     │  ├─ force-https.conf
 │     │  ├─ force-non-www.conf
 │     │  ├─ gzip-options.conf
+│     │  ├─ map-connection.conf
 │     │  ├─ map-non-www.conf
 │     │  ├─ proxy-options.conf
 │     │  ├─ proxy-ssl-options.conf

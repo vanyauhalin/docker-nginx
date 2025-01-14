@@ -9,6 +9,7 @@ http {
 	include snippets/base-headers.conf;
 	include snippets/brotli-options.conf;
 	include snippets/gzip-options.conf;
+	include snippets/map-connection.conf;
 	include snippets/map-non-www.conf;
 
 	server {
