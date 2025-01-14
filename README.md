@@ -16,11 +16,6 @@ Important criteria for creating this image were:
 - Write scripts as simply and clearly as possible.
 - Avoid performing complex operations in scripts.
 
-> [!TIP]
->
-> **If you have found this image helpful, show your support!** \
-> Give the project a star on GitHub. I appreciate it.
-
 ## Contents
 
 - [Installation](#installation)
