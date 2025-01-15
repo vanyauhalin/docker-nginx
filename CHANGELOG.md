@@ -6,15 +6,15 @@ This document records all notable changes to the project, following the [Keep a 
 
 There are no noticeable changes in version [unreleased].
 
-### Added
-
-- Add a snippet to set the `connection_upgrade` variable ([fa70f5d]).
-
 ### Changed
 
 - **Breaking** Separate headers for the proxy with its options ([1a4da68]).
 - Use the ISO 8601 date format in log messages ([92e3f61], [8984d77]).
 - Use colors in log messages ([92e3f61]).
+
+### Fixed
+
+- Add a snippet to set the `connection_upgrade` variable ([fa70f5d]).
 
 ## [0.0.1] - 2024-10-19
 
