@@ -18,7 +18,7 @@ There are no noticeable changes in version [unreleased].
 
 ## [0.0.1] - 2024-10-19
 
-This is the first, initial release. It is probably stable, but I want to test it with my projects for a few months first. This is why it is under the patch version, not a minor one. When I am sure that it works well, I will increase the version to 0.1.0 and mark it as stable.
+This is the first, initial release. The version 0.0.1 was chosen to test the publishing process and attempt to integrate it into other projects. If everything functions well, the version will be updated to 0.1.0, possibly with some changes.
 
 ### Added
 
