@@ -96,7 +96,7 @@ RUN \
 FROM alpine:$ALPINE_VERSION
 ARG ACME_VERSION
 LABEL org.opencontainers.image.title="nginx"
-LABEL org.opencontainers.image.version="0.0.1"
+LABEL org.opencontainers.image.version="0.0.2"
 LABEL org.opencontainers.image.authors="Ivan Uhalin <vanyauhalin@gmail.com>"
 LABEL org.opencontainers.image.description="A simple Docker image for Nginx that eliminates the need to configure it over and over again"
 LABEL org.opencontainers.image.licenses="MIT"
