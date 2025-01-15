@@ -6,6 +6,8 @@ This document records all notable changes to the project, following the [Keep a 
 
 There are no noticeable changes in version [unreleased].
 
+## [0.0.2] - 2024-01-15
+
 ### Changed
 
 - **Breaking** Separate headers for the proxy with its options ([1a4da68]).
@@ -32,7 +34,8 @@ This is the first, initial release. The version 0.0.1 was chosen to test the pub
 [Keep a Changelog]: https://keepachangelog.com/en/1.1.0/
 [Semantic Versioning]: https://semver.org/spec/v2.0.0.html
 
-[Unreleased]: https://github.com/vanyauhalin/docker-nginx/compare/v0.0.1...HEAD/
+[Unreleased]: https://github.com/vanyauhalin/docker-nginx/compare/v0.0.2...HEAD/
+[0.0.2]: https://github.com/vanyauhalin/docker-nginx/releases/tag/v0.0.2/
 [0.0.1]: https://github.com/vanyauhalin/docker-nginx/releases/tag/v0.0.1/
 
 [8984d77]: https://github.com/vanyauhalin/docker-nginx/commit/8984d778385708ce47d793ee081ba73fdd13977c/
