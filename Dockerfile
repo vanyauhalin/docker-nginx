@@ -124,6 +124,8 @@ COPY snippets/proxy-options.conf /etc/nginx/snippets/proxy-options.conf
 COPY snippets/proxy-ssl-options.conf /etc/nginx/snippets/proxy-ssl-options.conf
 COPY snippets/ssl-headers.conf /etc/nginx/snippets/ssl-headers.conf
 COPY snippets/ssl-options.conf /etc/nginx/snippets/ssl-options.conf
+ENV VERSION 0.0.2
+ENV USER_AGENT "me.vanyauhalin.docker-nginx 0.0.2"
 ENV LIB_DIR /usr/local/lib
 RUN \
 # Install dependencies

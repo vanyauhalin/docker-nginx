@@ -5,9 +5,6 @@ set -ue
 # shellcheck source=lib/log.sh
 . "$LIB_DIR/log.sh"
 
-AE_VERSION="0.0.2"
-AE_USER_AGENT="me.vanyauhalin.docker-nginx.ae $AE_VERSION"
-
 : "${AE_ENABLED:=1}"
 : "${AE_CRON:="0	3	*	*	6"}"
 : "${AE_DAYS:=90}"
@@ -568,7 +565,7 @@ acme_install() {
 	acme_base --install \
 		--email "$AE_EMAIL" \
 		--no-cron \
-		--useragent "$AE_USER_AGENT"
+		--useragent "$USER_AGENT"
 }
 
 acme_test() {
