@@ -4,7 +4,12 @@ This document records all notable changes to the project, following the [Keep a 
 
 ## [Unreleased]
 
-There are no noticeable changes in version [unreleased].
+<!-- There are no noticeable changes in version [unreleased]. -->
+
+### Changed
+
+- **Breaking** Change the redirect status from 301 to 308 for the `force-https` snippet ([f530788]).
+- **Breaking** Change the redirect status from 301 to 308 for the `force-non-www` snippet ([723658b]).
 
 ## [0.0.2] - 2024-01-15
 
@@ -38,6 +43,8 @@ This is the first, initial release. The version 0.0.1 was chosen to test the pub
 [0.0.2]: https://github.com/vanyauhalin/docker-nginx/releases/tag/v0.0.2/
 [0.0.1]: https://github.com/vanyauhalin/docker-nginx/releases/tag/v0.0.1/
 
+[f530788]: https://github.com/vanyauhalin/docker-nginx/commit/f530788af035215a7ffc4b3aab900ea56a94cdf5/
+[723658b]: https://github.com/vanyauhalin/docker-nginx/commit/723658b073699e3e6e91475a4599ce1de21c46c0/
 [8984d77]: https://github.com/vanyauhalin/docker-nginx/commit/8984d778385708ce47d793ee081ba73fdd13977c/
 [fa70f5d]: https://github.com/vanyauhalin/docker-nginx/commit/fa70f5d36426bb9d1097ed8007ba96bb3eddfb22/
 [92e3f61]: https://github.com/vanyauhalin/docker-nginx/commit/92e3f611618f591ac8457bf9fbd15d05e51d0477/
