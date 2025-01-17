@@ -560,7 +560,7 @@ openssl_dhparam() {
 openssl_check() {
 	openssl x509 \
 		-checkend "$((AE_THRESHOLD_DAYS * 24 * 60 * 60))" \
-		-in "$AE_NGINX_SSL_DIR/$1/$AE_FULLCHAIN_BASE" \
+		-in "$AE_NGINX_SSL_DIR/$1/$AE_CERT_BASE" \
 		-noout
 }
 
