@@ -47,7 +47,7 @@ ae_help() {
 	echo "       ae obtain [options] <type>"
 	echo "       ae renew [options]"
 	echo "       ae logs [options]"
-	echo "       ae acme <arguments>"
+	echo "       ae acme [acme options]"
 	echo
 	echo "Options:"
 	echo "  -p            Pipes the output to the log file"
@@ -55,18 +55,18 @@ ae_help() {
 	echo
 	echo "Subcommands:"
 	echo "  help          Shows this help message"
-	echo "  install       Installs the client"
+	echo "  install       Installs acme"
 	echo "  obtain        Obtains certificates"
 	echo "  schedule      Schedules certificate renewal"
 	echo "  trigger       Triggers scheduled operations"
 	echo "  renew         Renews certificates"
 	echo "  logs          Shows the log file"
 	echo "  env           Shows the environment variables"
-	echo "  acme          Runs the acme client"
+	echo "  acme          Runs acme with the specified arguments"
 	echo
 	echo "Obtain options:"
-	echo "  -g            Obtains certificates only for non-existing domains"
-	echo "  -s            Skips Nginx reload"
+	echo "  -g            Guards the existence of certificates"
+	echo "  -s            Skips rendering, testing Nginx configuration and reloading Nginx"
 	echo
 	echo "Obtain types:"
 	echo "  self          Obtains self-signed certificates"
@@ -74,11 +74,11 @@ ae_help() {
 	echo "  prod          Obtains production certificates"
 	echo
 	echo "Renew options:"
-	echo "  -f            Forces renewal of certificates"
+	echo "  -f            Forces the renewal of certificates"
 	echo
 	echo "Logs options:"
 	echo "  -f            Follows the log file"
-	echo "  -n <lines>    Shows the last <lines> lines of the log file"
+	echo "  -n <lines>    Shows the last n lines of the log file"
 	echo
 	echo "Environment variables:"
 	echo "  AE_ENABLED             Whether ae is enabled"
@@ -218,7 +218,8 @@ main() {
 			break
 		fi
 
-		break
+		log "ERROR Unknown argument '$1'"
+		return 1
 	done
 
 	if [ "$pipe" -eq 1 ]; then
@@ -289,7 +290,7 @@ main() {
 ae_install() {
 	status=0
 
-	log "INFO Installing the client"
+	log "INFO Installing acme"
 
 	dir=$(pwd)
 	cd "$AE_BIN_DIR"
@@ -297,7 +298,7 @@ ae_install() {
 
 	acme_install || status=$?
 	if [ $status -ne 0 ]; then
-		log "ERROR Failed to install the client with status '$status'"
+		log "ERROR Failed to install acme with status '$status'"
 		return $status
 	fi
 
@@ -305,7 +306,7 @@ ae_install() {
 	ln -s "$AE_ACME_HOME_DIR/acme.sh" "$AE_BIN_DIR/acme"
 	cd "$dir"
 
-	log "INFO Successfully installed the client"
+	log "INFO Successfully installed acme"
 }
 
 ae_obtain() {
@@ -333,9 +334,20 @@ ae_obtain() {
 	IFS=","
 
 	for domain in $AE_DOMAINS; do
-		if [ "$guard" -eq 1 ] && [ -d "$AE_NGINX_SSL_DIR/$domain" ]; then
-			continue
+		if [ "$guard" -eq 0 ]; then
+			log "INFO Skipping the existence check of the certificate for domain '$domain'"
+		else
+			log "INFO Checking the existence of the certificate for domain '$domain'"
+
+			if [ -d "$AE_NGINX_SSL_DIR/$domain" ]; then
+				log "INFO The $title certificate for domain '$domain' already exists"
+				continue
+			fi
+
+			log "INFO The $title certificate for domain '$domain' does not exist"
 		fi
+
+		log "INFO Obtaining a $title certificate for domain '$domain'"
 
 		case "$type" in
 		"self")
@@ -350,14 +362,17 @@ ae_obtain() {
 		esac
 
 		if [ $status -ne 0 ]; then
+			log "ERROR Failed to obtain a $title certificate for domain '$domain' with status '$status'"
 			break
 		fi
+
+		log "INFO Successfully obtained a $title certificate for domain '$domain'"
 	done
 
 	IFS="$ifs"
 
 	if [ $status -ne 0 ]; then
-		log "ERROR Failed to obtain certificates with status '$status'"
+		log "ERROR Failed to obtain $title certificates with status '$status'"
 		return $status
 	fi
 
@@ -367,7 +382,7 @@ ae_obtain() {
 }
 
 ae_schedule() {
-	log "INFO Scheduling cron job"
+	log "INFO Scheduling a cron job"
 
 	if ! pgrep -x crond > /dev/null 2>&1; then
 		log "INFO Cron daemon is not running, starting it"
@@ -376,12 +391,12 @@ ae_schedule() {
 
 	entries=$(crontab -l 2> /dev/null)
 	if echo "$entries" | grep -F "$AE_CRON_ENTRY" > /dev/null 2>&1; then
-		log "INFO Cron job is already scheduled"
+		log "INFO The cron job is already scheduled"
 		return
 	fi
 
 	printf "%s\n%s\n" "$entries" "$AE_CRON_ENTRY" | crontab -
-	log "INFO Successfully scheduled cron job"
+	log "INFO Successfully scheduled a cron job"
 }
 
 ae_trigger() {
@@ -415,17 +430,29 @@ ae_renew() {
 	IFS=","
 
 	for domain in $AE_DOMAINS; do
-		if [ "$force" -eq 0 ]; then
+		if [ "$force" -eq 1 ]; then
+			log "INFO Forcing the renewal of the certificate for domain '$domain'"
+		else
+			log "INFO Checking the validity of the certificate for domain '$domain'"
+
 			openssl_check "$domain" || status=$?
 			if [ $status -eq 0 ]; then
+				log "INFO The certificate for domain '$domain' is still valid"
 				continue
 			fi
+
+			log "INFO The certificate for domain '$domain' is expired or about to expire"
 		fi
+
+		log "INFO Renewing the certificate for domain '$domain'"
 
 		acme_renew "$domain" || status=$?
 		if [ $status -ne 0 ]; then
+			log "ERROR Failed to renew the certificate for domain '$domain' with status '$status'"
 			break
 		fi
+
+		log "INFO Successfully renewed the certificate for domain '$domain'"
 
 		skip=0
 	done
@@ -488,37 +515,40 @@ ae_nginx() {
 
 		log "INFO Successfully populated Nginx configuration"
 
-		if [ "$skip" -eq 0 ]; then
-			log "INFO Rendering Nginx configuration"
-
-			ng render || status=$?
-			if [ $status -ne 0 ]; then
-				log "ERROR Failed to render Nginx configuration with status '$status'"
-				break
-			fi
-
-			log "INFO Successfully rendered Nginx configuration"
-
-			log "INFO Testing Nginx configuration"
-
-			nginx_test || status=$?
-			if [ $status -ne 0 ]; then
-				log "ERROR Failed to test Nginx configuration with status '$status'"
-				break
-			fi
-
-			log "INFO Successfully tested Nginx configuration"
-
-			log "INFO Reloading Nginx"
-
-			nginx_reload || status=$?
-			if [ $status -ne 0 ]; then
-				log "ERROR Failed to reload Nginx with status '$status'"
-				break
-			fi
-
-			log "INFO Successfully reloaded Nginx"
+		if [ "$skip" -eq 1 ]; then
+			log "INFO Skipping rendering, testing Nginx configuration and reloading Nginx"
+			break
 		fi
+
+		log "INFO Rendering Nginx configuration"
+
+		ng render || status=$?
+		if [ $status -ne 0 ]; then
+			log "ERROR Failed to render Nginx configuration with status '$status'"
+			break
+		fi
+
+		log "INFO Successfully rendered Nginx configuration"
+
+		log "INFO Testing Nginx configuration"
+
+		nginx_test || status=$?
+		if [ $status -ne 0 ]; then
+			log "ERROR Failed to test Nginx configuration with status '$status'"
+			break
+		fi
+
+		log "INFO Successfully tested Nginx configuration"
+
+		log "INFO Reloading Nginx"
+
+		nginx_reload || status=$?
+		if [ $status -ne 0 ]; then
+			log "ERROR Failed to reload Nginx with status '$status'"
+			break
+		fi
+
+		log "INFO Successfully reloaded Nginx"
 	done
 
 	if [ $status -ne 0 ]; then
