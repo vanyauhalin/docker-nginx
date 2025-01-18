@@ -339,12 +339,12 @@ ae_obtain() {
 		else
 			log "INFO Checking the existence of the certificate for domain '$domain'"
 
-			if \
-				[ -d "$AE_NGINX_SSL_DIR/$domain" ] && \
-				[ -f "$AE_NGINX_SSL_DIR/$domain/$AE_CERT_BASE" ] && \
-				[ -f "$AE_NGINX_SSL_DIR/$domain/$AE_CHAIN_BASE" ] && \
-				[ -f "$AE_NGINX_SSL_DIR/$domain/$AE_FULLCHAIN_BASE" ] && \
-				[ -f "$AE_NGINX_SSL_DIR/$domain/$AE_PRIVKEY_BASE" ]; \
+			if
+				[ -d "$AE_NGINX_SSL_DIR/$domain" ] &&
+					[ -f "$AE_NGINX_SSL_DIR/$domain/$AE_CERT_BASE" ] &&
+					[ -f "$AE_NGINX_SSL_DIR/$domain/$AE_CHAIN_BASE" ] &&
+					[ -f "$AE_NGINX_SSL_DIR/$domain/$AE_FULLCHAIN_BASE" ] &&
+					[ -f "$AE_NGINX_SSL_DIR/$domain/$AE_PRIVKEY_BASE" ]
 			then
 				log "INFO The $title certificate for domain '$domain' already exists"
 				continue

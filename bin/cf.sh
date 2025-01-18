@@ -240,9 +240,9 @@ cf_obtain() {
 		else
 			log "INFO Checking the existence of the certificate for domain '$domain'"
 
-			if \
-				[ -d "$CF_NGINX_SSL_DIR/$domain" ] && \
-				[ -f "$CF_NGINX_SSL_DIR/$domain/$CF_CA_CERT_BASE" ]; \
+			if
+				[ -d "$CF_NGINX_SSL_DIR/$domain" ] &&
+					[ -f "$CF_NGINX_SSL_DIR/$domain/$CF_CA_CERT_BASE" ]
 			then
 				log "INFO The $CF_TYPE certificate for domain '$domain' already exists"
 				continue
