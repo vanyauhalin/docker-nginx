@@ -741,7 +741,7 @@ healthchecks_ping() {
 	if [ -n "$AE_HEALTHCHECKS_URL" ]; then
 		wget \
 			--header "Accept: text/plain" \
-			--header "User-Agent: $AE_USER_AGENT" \
+			--header "User-Agent: $USER_AGENT" \
 			--output-document - \
 			--quiet \
 			--timeout 10 \
