@@ -6,10 +6,18 @@ This document records all notable changes to the project, following the [Keep a 
 
 <!-- There are no noticeable changes in version [unreleased]. -->
 
+### Added
+
+- Add the `cf` script for obtaining Cloudflare Origin CA certificates ([3d56bd7]).
+
 ### Changed
 
 - **Breaking** Change the redirect status from 301 to 308 for the `force-https` snippet ([f530788]).
 - **Breaking** Change the redirect status from 301 to 308 for the `force-non-www` snippet ([723658b]).
+- Use the certificate itself instead of its full chain to check the expiration ([3f29803]).
+- Use a more concise and generic User-Agent ([7e8eed5]).
+- Improve the `ae` log messages a bit ([d05eb82]).
+- Check the existence of all SLL files for the `ae` guard option ([917f105]).
 
 ## [0.0.2] - 2024-01-15
 
@@ -43,6 +51,11 @@ This is the first, initial release. The version 0.0.1 was chosen to test the pub
 [0.0.2]: https://github.com/vanyauhalin/docker-nginx/releases/tag/v0.0.2/
 [0.0.1]: https://github.com/vanyauhalin/docker-nginx/releases/tag/v0.0.1/
 
+[3d56bd7]: https://github.com/vanyauhalin/docker-nginx/commit/3d56bd7ba0ffb053a970508f49bb1495e5bdeff4/
+[917f105]: https://github.com/vanyauhalin/docker-nginx/commit/917f105b31a48c05c7249f64a2d3925f9f0aeb55/
+[d05eb82]: https://github.com/vanyauhalin/docker-nginx/commit/d05eb82634c5061cac6e11eb869489b142f5fc4e/
+[7e8eed5]: https://github.com/vanyauhalin/docker-nginx/commit/7e8eed5f557a222380174fd08ea49fc46325e5da/
+[3f29803]: https://github.com/vanyauhalin/docker-nginx/commit/3f298034d9375866ecc516c67ced9da4c55b96c7/
 [f530788]: https://github.com/vanyauhalin/docker-nginx/commit/f530788af035215a7ffc4b3aab900ea56a94cdf5/
 [723658b]: https://github.com/vanyauhalin/docker-nginx/commit/723658b073699e3e6e91475a4599ce1de21c46c0/
 [8984d77]: https://github.com/vanyauhalin/docker-nginx/commit/8984d778385708ce47d793ee081ba73fdd13977c/
