@@ -17,7 +17,6 @@ http {
 	include snippets/ssl-options.conf;
 	include snippets/ssl-dhparam.conf;
 	include snippets/ssl-headers.conf;
-	# include snippets/ssl-client-options.conf;
 
 	include snippets/proxy-options.conf;
 	include snippets/proxy-headers.conf;
@@ -40,7 +39,6 @@ http {
 		http2 on;
 
 		include snippets/${NGINX_SERVER_ALIAS}/ssl-certificate.conf;
-		# include snippets/${NGINX_SERVER_ALIAS}/ssl-client-certificate.conf;
 		include snippets/force-non-www.conf;
 	}
 
@@ -61,7 +59,6 @@ http {
 		http2 on;
 
 		include snippets/${NGINX_SERVER_NAME}/ssl-certificate.conf;
-		# include snippets/${NGINX_SERVER_NAME}/ssl-client-certificate.conf;
 
 		location / {
 			root html;

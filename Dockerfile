@@ -107,7 +107,6 @@ COPY --from=build /usr/bin/envsubst /usr/bin/envsubst
 COPY --from=build /usr/lib/libintl.so.8 /usr/lib/libintl.so.8
 COPY --from=build /usr/sbin/nginx /usr/sbin/nginx
 COPY bin/ae.sh /usr/local/bin/ae
-COPY bin/cf.sh /usr/local/bin/cf
 COPY bin/entrypoint.sh /usr/local/bin/entrypoint
 COPY bin/ng.sh /usr/local/bin/ng
 COPY lib/color.sh /usr/local/lib/color.sh
@@ -123,7 +122,6 @@ COPY snippets/map-non-www.conf /etc/nginx/snippets/map-non-www.conf
 COPY snippets/proxy-headers.conf /etc/nginx/snippets/proxy-headers.conf
 COPY snippets/proxy-options.conf /etc/nginx/snippets/proxy-options.conf
 COPY snippets/proxy-ssl-options.conf /etc/nginx/snippets/proxy-ssl-options.conf
-COPY snippets/ssl-client-options.conf /etc/nginx/snippets/ssl-client-options.conf
 COPY snippets/ssl-headers.conf /etc/nginx/snippets/ssl-headers.conf
 COPY snippets/ssl-options.conf /etc/nginx/snippets/ssl-options.conf
 ENV VERSION 0.0.2
@@ -139,7 +137,6 @@ RUN \
 	chmod +x \
 		/usr/local/bin/acme \
 		/usr/local/bin/ae \
-		/usr/local/bin/cf \
 		/usr/local/bin/entrypoint \
 		/usr/local/bin/ng && \
 # Create Nginx user

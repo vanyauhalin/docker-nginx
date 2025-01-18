@@ -6,7 +6,6 @@ This image contains:
 
 - A static Brotli module.
 - Support for obtaining SSL certificates with their auto-renewal.
-- Support for obtaining Origin CA certificates from Cloudflare with their auto-renewal.
 - The ability to substitute environment variables in the Nginx configuration.
 - A few basic snippets to configure Nginx.
 
@@ -96,52 +95,6 @@ Environment variables:
 </details>
 
 <details>
-  <summary>Show <code>cf</code> help message</summary>
-
-```txt
-Usage: cf [options] <subcommand>
-       cf obtain [options]
-       cf renew [options]
-       cf logs [options]
-
-Options:
-  -p            Pipes the output to the log file
-
-Subcommands:
-  help          Shows this help message
-  obtain        Obtains certificates
-  schedule      Schedules certificate renewal
-  trigger       Triggers scheduled operations
-  renew         Renews certificates
-  logs          Shows the log file
-  env           Shows the environment variables
-
-Obtain options:
-  -g            Guards the existence of certificates
-  -s            Skips rendering, testing Nginx configuration and reloading Nginx
-
-Renew options:
-  -f            Forces the renewal of certificates
-
-Logs options:
-  -f            Follows the log file
-  -n <lines>    Shows the last n lines of the log file
-
-Environment variables:
-  CF_ENABLED             Whether cf is enabled
-  CF_CRON                Cron schedule for certificate renewal
-  CF_DAYS                Validity period for certificates when obtaining new ones
-                         (can be 7, 30, 90, 365, 730, 1095, 5475)
-  CF_DOMAINS             Comma-separated list of domains to obtain certificates for
-  CF_TYPE                Type of certificate to obtain
-                         (can be origin-rsa, origin-ecc, keyless-certificate)
-  CF_API_TOKEN           Cloudflare API token
-  CF_HEALTHCHECKS_URL    URL to Healthchecks check
-```
-
-</details>
-
-<details>
   <summary>Show <code>ng</code> help message</summary>
 
 ```txt
@@ -164,14 +117,11 @@ Environment variables:
 ├─ etc
 │  ├─ acme
 │  │  └─ ***
-│  ├─ cloudflare
-│  │  └─ ***
 │  └─ nginx
 │     ├─ snippets
 │     │  ├─ example.com
 │     │  │  ├─ proxy-ssl-certificate.conf
-│     │  │  ├─ ssl-certificate.conf
-│     │  │  └─ ssl-client-certificate.conf
+│     │  │  └─ ssl-certificate.conf
 │     │  ├─ acme-challenge.conf
 │     │  ├─ base-headers.conf
 │     │  ├─ base-options.conf
@@ -183,7 +133,6 @@ Environment variables:
 │     │  ├─ map-non-www.conf
 │     │  ├─ proxy-options.conf
 │     │  ├─ proxy-ssl-options.conf
-│     │  ├─ ssl-client-options.conf
 │     │  ├─ ssl-dhparam.conf
 │     │  ├─ ssl-headers.conf
 │     │  └─ ssl-options.conf
@@ -203,7 +152,6 @@ Environment variables:
 │  │  ├─ bin
 │  │  │  ├─ acme
 │  │  │  ├─ ae
-│  │  │  ├─ cf
 │  │  │  ├─ entrypoint
 │  │  │  └─ ng
 │  │  └─ lib
@@ -213,8 +161,6 @@ Environment variables:
 │     └─ nginx
 ├─ log
 │  ├─ ae
-│  │  └─ output.log
-│  ├─ cf
 │  │  └─ output.log
 │  └─ nginx
 │     ├─ access.log

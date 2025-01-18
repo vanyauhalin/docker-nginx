@@ -6,10 +6,6 @@ This document records all notable changes to the project, following the [Keep a 
 
 <!-- There are no noticeable changes in version [unreleased]. -->
 
-### Added
-
-- Add the `cf` script for obtaining Cloudflare Origin CA certificates ([3d56bd7]).
-
 ### Changed
 
 - **Breaking** Change the redirect status from 301 to 308 for the `force-https` snippet ([f530788]).
@@ -51,7 +47,6 @@ This is the first, initial release. The version 0.0.1 was chosen to test the pub
 [0.0.2]: https://github.com/vanyauhalin/docker-nginx/releases/tag/v0.0.2/
 [0.0.1]: https://github.com/vanyauhalin/docker-nginx/releases/tag/v0.0.1/
 
-[3d56bd7]: https://github.com/vanyauhalin/docker-nginx/commit/3d56bd7ba0ffb053a970508f49bb1495e5bdeff4/
 [917f105]: https://github.com/vanyauhalin/docker-nginx/commit/917f105b31a48c05c7249f64a2d3925f9f0aeb55/
 [d05eb82]: https://github.com/vanyauhalin/docker-nginx/commit/d05eb82634c5061cac6e11eb869489b142f5fc4e/
 [7e8eed5]: https://github.com/vanyauhalin/docker-nginx/commit/7e8eed5f557a222380174fd08ea49fc46325e5da/
