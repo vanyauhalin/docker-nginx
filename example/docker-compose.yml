@@ -6,10 +6,13 @@ services:
     - 443:443
     volumes:
     - ./etc/acme:/etc/acme
+    - ./etc/cloudflare:/etc/cloudflare
     - ./etc/nginx/ssl:/etc/nginx/ssl
     - ./nginx.conf.template:/etc/nginx/nginx.conf.template
     environment:
     - NGINX_SERVER_ALIAS=www.example.com
     - NGINX_SERVER_NAME=example.com
+    - CF_DOMAINS=www.example.com,example.com
+    - CF_API_TOKEN=your_cloudflare_api_token
     - AE_EMAIL=hi@example.com
     - AE_DOMAINS=www.example.com,example.com
